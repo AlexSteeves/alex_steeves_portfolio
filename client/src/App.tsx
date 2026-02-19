@@ -1,50 +1,41 @@
-import { useState } from "react";
-import beaver from "./assets/beaver.svg";
-import type { ApiResponse } from "shared";
+import type React from "react";
+import { BrowserRouter, Routes, Route, NavLink } from "react-router-dom";
+import Home from "./pages/Home";
+import Stocks from "./pages/Stocks";
 import "./App.css";
 
-const SERVER_URL = import.meta.env.DEV ? "http://localhost:3000/api" : "api";
-
-function App() {
-  const [data, setData] = useState<ApiResponse | undefined>();
-
-  async function sendRequest() {
-    try {
-      const req = await fetch(`${SERVER_URL}/hello`);
-      const res: ApiResponse = await req.json();
-      setData(res);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
+function NavBar(): React.ReactElement {
   return (
-    <>
-      <div>
-        <a href="https://github.com/stevedylandev/bhvr" target="_blank">
-          <img src={beaver} className="logo" alt="beaver logo" />
-        </a>
+    <nav className="navbar">
+      <span className="nav-brand">Alex Steeves</span>
+      <div className="nav-links">
+        <NavLink
+          to="/"
+          end
+          className={({ isActive }) => `nav-link${isActive ? " active" : ""}`}
+        >
+          Home
+        </NavLink>
+        <NavLink
+          to="/stocks"
+          className={({ isActive }) => `nav-link${isActive ? " active" : ""}`}
+        >
+          Stocks
+        </NavLink>
       </div>
-      <h1>bhvr</h1>
-      <h2>Bun + Hono + Vite + React</h2>
-      <p>A typesafe fullstack monorepo</p>
-      <div className="card">
-        <div className="button-container">
-          <button onClick={sendRequest}>Call API</button>
-          <a className="docs-link" target="_blank" href="https://bhvr.dev">
-            Docs
-          </a>
-        </div>
-        {data && (
-          <pre className="response">
-            <code>
-              Message: {data.message} <br />
-              Success: {data.success.toString()}
-            </code>
-          </pre>
-        )}
-      </div>
-    </>
+    </nav>
+  );
+}
+
+function App(): React.ReactElement {
+  return (
+    <BrowserRouter>
+      <NavBar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/stocks" element={<Stocks />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

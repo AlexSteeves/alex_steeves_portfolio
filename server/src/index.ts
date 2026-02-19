@@ -2,22 +2,21 @@ import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import type { ApiResponse } from 'shared'
 
-const app = new Hono().basePath("/api")
+type Bindings = {
+  FINNHUB_API_KEY: string
+}
+
+const app = new Hono<{ Bindings: Bindings }>().basePath("/api")
 
 app.use(cors())
 
-app.get('/', (c) => {
-  return c.text('Hello Hono!')
-})
-
-app.get('/hello', async (c) => {
-
-  const data: ApiResponse = {
-    message: "Hello BHVR!",
-    success: true
-  }
-
-  return c.json(data, { status: 200 })
-})
+app.get("/stocks/aapl", async (c) => {
+  const apiKey = c.env.FINNHUB_API_KEY || process.env.FINNHUB_API_KEY
+  const res = await fetch(
+    `https://finnhub.io/api/v1/quote?symbol=AAPL&token=${apiKey}`
+  );
+  const data = await res.json();
+  return c.json(data);
+});
 
 export default app
