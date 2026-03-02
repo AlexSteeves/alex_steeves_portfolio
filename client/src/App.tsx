@@ -2,6 +2,7 @@ import type React from "react";
 import { BrowserRouter, Routes, Route, NavLink } from "react-router-dom";
 import Home from "./pages/Home";
 import Stocks from "./pages/Stocks";
+import Trades from "./pages/Trades";
 import "./App.css";
 
 function NavBar(): React.ReactElement {
@@ -22,6 +23,12 @@ function NavBar(): React.ReactElement {
         >
           Stocks
         </NavLink>
+        <NavLink
+          to="/trades"
+          className={({ isActive }) => `nav-link${isActive ? " active" : ""}`}
+        >
+          Trades
+        </NavLink>
       </div>
     </nav>
   );
@@ -34,6 +41,7 @@ function App(): React.ReactElement {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/stocks" element={<Stocks />} />
+        <Route path="/trades" element={<Trades />} />
       </Routes>
     </BrowserRouter>
   );
