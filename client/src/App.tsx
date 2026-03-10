@@ -1,8 +1,8 @@
 import type React from "react";
 import { BrowserRouter, Routes, Route, NavLink } from "react-router-dom";
-import Home from "./pages/Home";
-import Stocks from "./pages/Stocks";
-import Trades from "./pages/Trades";
+import Portfolio from "./pages/Portfolio";
+import CapitolTrades from "./pages/CapitolTrades";
+import Projects from "./pages/Projects";
 import "./App.css";
 
 function NavBar(): React.ReactElement {
@@ -15,19 +15,19 @@ function NavBar(): React.ReactElement {
           end
           className={({ isActive }) => `nav-link${isActive ? " active" : ""}`}
         >
-          Home
+          Portfolio
         </NavLink>
         <NavLink
-          to="/stocks"
+          to="/capitol-trades"
           className={({ isActive }) => `nav-link${isActive ? " active" : ""}`}
         >
-          Stocks
+          Capitol Trades
         </NavLink>
         <NavLink
-          to="/trades"
+          to="/projects"
           className={({ isActive }) => `nav-link${isActive ? " active" : ""}`}
         >
-          Trades
+          Projects
         </NavLink>
       </div>
     </nav>
@@ -39,9 +39,9 @@ function App(): React.ReactElement {
     <BrowserRouter>
       <NavBar />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/stocks" element={<Stocks />} />
-        <Route path="/trades" element={<Trades />} />
+        <Route path="/" element={<Portfolio />} />
+        <Route path="/projects" element={<Projects />} />
+        <Route path="/capitol-trades" element={<CapitolTrades />} />
       </Routes>
     </BrowserRouter>
   );

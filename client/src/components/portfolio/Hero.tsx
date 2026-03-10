@@ -3,7 +3,9 @@ import type React from "react";
 const Hero: React.FC = () => {
   return (
     <section className="hero-section">
-      <p className="hero-label">Software Developer</p>
+      <p className="hero-label">
+        Full-Stack Developer | TypeScript, React & Python
+      </p>
       <h1 className="hero-name">Alex Steeves</h1>
       <p className="hero-tagline">
         Computer Engineering graduate building responsive, scalable applications

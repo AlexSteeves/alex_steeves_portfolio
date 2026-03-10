@@ -13,6 +13,7 @@ const experiences: ExperienceItem[] = [
     company: "Autocase",
     location: "Toronto, ON",
     role: "Software Developer",
+    period: "July 2024 – Feb 2026",
     highlights: [
       "Refactored front-end architecture using TypeScript and React Query to implement a fully responsive UI, reducing navigation time by 50% and ensuring cross-platform compatibility.",
       "Architected and managed PostgreSQL schemas and relational models, utilizing Alembic for database migrations to maintain version control and data integrity across environments.",

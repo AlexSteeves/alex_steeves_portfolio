@@ -35,6 +35,7 @@ export type Politician = {
   politician_party: string | null;
   politician_chamber: string | null;
   politician_state: string | null;
+  total_value: number;
 }
 
 export type PoliticianCommittee = {
