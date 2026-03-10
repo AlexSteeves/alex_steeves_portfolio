@@ -30,17 +30,37 @@ app.get("/stocks/:ticker", async (c) => {
   return c.json(data);
 });
 
+function parseValueLowerBound(value: string | null): number {
+  if (!value) return 0
+  const match = value.match(/\$([0-9,]+)/)
+  if (!match) return 0
+  return parseInt(match[1].replace(/,/g, ''), 10) || 0
+}
+
 app.get("/politicians", async (c) => {
   const supabase = getSupabase(c.env)
 
-  const { data, error } = await supabase
-    .from('politicians_with_trades')
-    .select('*')
-    .order('politician_name')
+  const [{ data: polData, error: polErr }, { data: tradeData, error: tradeErr }] =
+    await Promise.all([
+      supabase.from('politicians_with_trades').select('*').order('politician_name'),
+      supabase.from('trades').select('politician_name, value'),
+    ])
 
-  if (error) return c.json({ error: error.message }, 500)
+  if (polErr) return c.json({ error: polErr.message }, 500)
+  if (tradeErr) return c.json({ error: tradeErr.message }, 500)
 
-  return c.json<Politician[]>(data ?? [])
+  const totals = new Map<string, number>()
+  for (const t of tradeData ?? []) {
+    const key = t.politician_name.toLowerCase()
+    totals.set(key, (totals.get(key) ?? 0) + parseValueLowerBound(t.value))
+  }
+
+  const politicians: Politician[] = (polData ?? []).map((p) => ({
+    ...p,
+    total_value: totals.get(p.politician_name.toLowerCase()) ?? 0,
+  }))
+
+  return c.json(politicians)
 })
 
 app.get("/politicians/:bioguide/committees", async (c) => {
