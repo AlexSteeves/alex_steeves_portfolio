@@ -30,11 +30,13 @@ app.get("/stocks/:ticker", async (c) => {
   return c.json(data);
 });
 
+// Trade values are stored as ranges e.g. "$1,001 - $15,000" since exact amounts are not disclosed.
+// This extracts the lower bound as an integer so we can sum a politician's total traded value for sorting/filtering.
 function parseValueLowerBound(value: string | null): number {
   if (!value) return 0
-  const match = value.match(/\$([0-9,]+)/)
+  const match = value.match(/\$[0-9,]+/)
   if (!match) return 0
-  return parseInt(match[1].replace(/,/g, ''), 10) || 0
+  return parseInt(match[0].replace('$', '').replace(/,/g, ''), 10) || 0
 }
 
 app.get("/politicians", async (c) => {
