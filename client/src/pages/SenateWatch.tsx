@@ -12,7 +12,7 @@ import TradeTable from "../components/capitoltrades/TradeTable";
 const SERVER_URL = import.meta.env.DEV ? "http://localhost:3000/api" : "/api";
 const LIMIT = 100;
 
-export default function CapitolTrades() {
+export default function SenateWatch() {
   const [politicians, setPoliticians] = useState<Politician[]>([]);
   const [selected, setSelected] = useState<Politician | null>(null);
   const [committees, setCommittees] = useState<PoliticianCommittee[]>([]);
@@ -97,7 +97,7 @@ export default function CapitolTrades() {
             marginBottom: "0.5rem",
           }}
         >
-          Capitol Trades
+          Senate Watch
         </h1>
         <div
           style={{ display: "flex", flexDirection: "column", gap: "0.25rem" }}
