@@ -4,6 +4,7 @@ import NavBar from "./components/nav/NavBar";
 import Portfolio from "./pages/Portfolio";
 import SenateWatch from "./pages/SenateWatch";
 import Projects from "./pages/Projects";
+import TorontoEvents from "./pages/TorontoEvents";
 import "./App.css";
 
 function App(): React.ReactElement {
@@ -14,6 +15,7 @@ function App(): React.ReactElement {
         <Route path="/" element={<Portfolio />} />
         <Route path="/projects" element={<Projects />} />
         <Route path="/senate-watch" element={<SenateWatch />} />
+        <Route path="/toronto-events" element={<TorontoEvents />} />
       </Routes>
     </BrowserRouter>
   );
