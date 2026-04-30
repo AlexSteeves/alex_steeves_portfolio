@@ -1,10 +1,10 @@
 {
-  "name": "my-app",
+  "name": "alex-steeves-portfolio",
   "version": "0.5.1",
-  "description": "A monorepo template built with Bun, Hono, Vite, and React",
-  "author": "Steve Simkins",
+  "description": "Personal portfolio and full-stack tools built with React, Hono, and Cloudflare Workers.",
+  "author": "Alex Steeves",
   "license": "MIT",
-  "homepage": "https://github.com/stevedylandev/bhvr",
+  "homepage": "https://github.com/AlexSteeves/alex_steeves_portfolio",
   "packageManager": "bun@1.2.4",
   "workspaces": [
     "./server",

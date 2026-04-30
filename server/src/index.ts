@@ -14,15 +14,12 @@ const app = new Hono<{ Bindings: Bindings }>().basePath("/api");
 app.use(cors());
 
 function getSupabase(env: Bindings) {
-  return createClient(
-    env.SUPABASE_URL || process.env.SUPABASE_URL!,
-    env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_SERVICE_KEY!,
-  );
+  return createClient(env.SUPABASE_URL, env.SUPABASE_SERVICE_KEY);
 }
 
 app.get("/stocks/:ticker", async (c) => {
   const symbol = c.req.param("ticker").toUpperCase();
-  const apiKey = c.env.FINNHUB_API_KEY || process.env.FINNHUB_API_KEY;
+  const apiKey = c.env.FINNHUB_API_KEY;
   const res = await fetch(
     `https://finnhub.io/api/v1/quote?symbol=${symbol}&token=${apiKey}`,
   );
@@ -150,8 +147,10 @@ app.get("/toronto-events", async (c) => {
   let cache: Cache | undefined;
   try {
     if (typeof caches !== "undefined") cache = caches.default;
-    const cached = await cache.match(new Request(TORONTO_CACHE_KEY));
-    if (cached) return cached;
+    if (cache) {
+      const cached = await cache.match(new Request(TORONTO_CACHE_KEY));
+      if (cached) return cached;
+    }
   } catch {}
 
   let raw: { value: TorontoRawEvent[] };

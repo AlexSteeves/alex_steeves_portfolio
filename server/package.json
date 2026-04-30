@@ -11,7 +11,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "dev": "bun --watch run src/index.ts"
+    "dev": "wrangler dev --config ../wrangler.jsonc"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.49.4",
