@@ -49,3 +49,37 @@ export type PoliticianCommittee = {
     sector: string | null;
   } | null;
 }
+
+export type TorontoEventLocation = {
+  location_name: string;
+  location_address: string;
+}
+
+export type TorontoEventDate = {
+  date: number;
+  locations: string[];
+  sdate: string;
+}
+
+export type TorontoEvent = {
+  id: string;
+  event_name: string;
+  short_description: string | null;
+  event_startdate: string;
+  event_enddate: string;
+  event_category: string[];
+  free_event: string;
+  event_locations: TorontoEventLocation[];
+  event_website: string | null;
+  event_dates: TorontoEventDate[];
+  featured_event: string;
+  event_theme: string[];
+  accessible_event: string;
+}
+
+export type TorontoEventsResponse = {
+  events: TorontoEvent[];
+  total: number;
+  page: number;
+  limit: number;
+}
