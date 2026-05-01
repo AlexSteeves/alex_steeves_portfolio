@@ -1,25 +1,56 @@
 # Alex Steeves — Portfolio
 
-A personal portfolio and a growing collection of pages I've built because I wanted them to exist. From tracking shady senate trades to finding something to do in Toronto this weekend — these are tools I actually use.
+[![Live Site](https://img.shields.io/badge/Live%20Site-alexsteeves.dev-blue?style=flat-square)](https://alexsteeves.dev)
 
-Built with React, Hono, and Cloudflare Workers.
+A full-stack personal portfolio and web application suite deployed on Cloudflare's edge network. The site serves as both a professional profile and a collection of tools built around real data sources — from U.S. Senate financial disclosures to live city event feeds.
+
+Built with React, TypeScript, Hono, and Cloudflare Workers.
+
+---
 
 ## Pages
 
-- **Portfolio** — Who I am and what I've been building.
-- **Projects** — A look at what I'm currently working on.
-- **Senate Watch** — Cross-references recent U.S. senator stock trades with the committees they sit on. Turns out the overlap is interesting.
-- **Toronto Events** — Upcoming in-person events pulled live from the City of Toronto Open Data portal. No online events, no duplicates, just things actually happening near you.
+| Page | Description |
+|------|-------------|
+| **Portfolio** | Professional profile, skills, and background. |
+| **Projects** | Overview of current and past projects. |
+| **Senate Watch** | Cross-references U.S. senator stock trades against the committees they sit on, sourced from public Senate financial disclosure data. |
+| **Toronto Events** | Live in-person events pulled from the City of Toronto Open Data portal. Filters out online-only events and duplicates — just things actually happening nearby. |
 
-## Dev
+---
 
-```bash
-bun run dev          # All workspaces
-bun run dev:client   # Client only
-bun run dev:server   # Server only
+## Project Structure
+
+```
+/
+├── client/       # React frontend application
+├── server/       # Hono API server (Cloudflare Workers)
+├── shared/       # Shared TypeScript types and utilities
+├── turbo.json    # Turborepo pipeline configuration
+└── wrangler.jsonc # Cloudflare Workers deployment config
 ```
 
-## Deploy
+---
+
+## Getting Started
+
+### Installation
+
+```bash
+git clone https://github.com/AlexSteeves/alex_steeves_portfolio.git
+cd alex_steeves_portfolio
+bun install
+```
+
+### Development
+
+```bash
+bun run dev          # Start all workspaces
+bun run dev:client   # Start client only
+bun run dev:server   # Start server only
+```
+
+### Deployment
 
 ```bash
 bun run build
@@ -28,4 +59,8 @@ bun run deploy
 
 ---
 
-© 2025 Alex Steeves. Feel free to explore the code — just don't forget to give credit.
+## License
+
+This project is open for exploration. Feel free to reference or learn from the code — attribution is appreciated.
+
+© 2025 Alex Steeves
