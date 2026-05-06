@@ -8,6 +8,19 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    name: "StatementLens",
+    description:
+      "A local bank statement analyzer that processes CSV exports into categorized spending breakdowns, monthly trends, and AI-generated financial insights. Keeps sensitive financial data fully local while using Claude via MCP to reason transparently over your transactions.",
+    url: "https://github.com/AlexSteeves/statement-lens",
+    tags: ["Java", "Spring Boot", "Spring AI", "React", "TypeScript", "Tailwind CSS", "Claude AI", "MCP"],
+    highlights: [
+      "Uploads TD credit card CSV exports and runs agentic AI analysis via MCP servers exposed as callable tools (getSpendingByCategory, getMonthlyTrend).",
+      "Shows Claude's step-by-step reasoning as it categorizes transactions — no black-box outputs.",
+      "Generates spending category breakdowns, merchant summaries, and monthly trend visualizations.",
+      "Runs entirely locally so sensitive financial data never leaves the machine.",
+    ],
+  },
+  {
     name: "EarningsLensAI",
     description:
       "A RAG-powered document analysis tool for interrogating earnings call transcripts and 10-K filings in plain English. Upload a PDF, ask questions like \"What did management say about revenue guidance?\", and get grounded answers with source citations — no digging through 80-page documents.",
