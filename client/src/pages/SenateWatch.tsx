@@ -74,9 +74,7 @@ export default function SenateWatch() {
     return () => controller.abort();
   }, [selected, page]);
 
-  function handleSelect(e: React.ChangeEvent<HTMLSelectElement>) {
-    const pol =
-      politicians.find((p) => p.bioguide_id === e.target.value) ?? null;
+  function handleSelect(pol: Politician | null) {
     setSelected(pol);
     setPage(1);
     setCommittees([]);

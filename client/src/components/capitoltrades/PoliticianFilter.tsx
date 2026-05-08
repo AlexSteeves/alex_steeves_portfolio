@@ -1,4 +1,4 @@
-import type React from "react";
+import Select from "react-select";
 import type { Politician } from "shared";
 
 interface PoliticianFilterProps {
@@ -8,8 +8,97 @@ interface PoliticianFilterProps {
   maxTotal: number;
   selected: Politician | null;
   onMinValueChange: (v: number) => void;
-  onSelect: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  onSelect: (pol: Politician | null) => void;
 }
+
+type Option = { value: string; label: string; meta: string };
+
+function toOptions(politicians: Politician[]): Option[] {
+  return politicians.map((p) => ({
+    value: p.bioguide_id,
+    label: p.politician_name,
+    meta: [
+      p.politician_party === "republican" ? "🐘" : p.politician_party === "democrat" ? "🫏" : "",
+      p.politician_chamber === "senate" ? "Senate" : p.politician_chamber === "house" ? "House" : "",
+    ]
+      .filter(Boolean)
+      .join(" · "),
+  }));
+}
+
+const selectStyles = {
+  control: (base: object, state: { isFocused: boolean }) => ({
+    ...base,
+    background: "var(--bg-card)",
+    border: `1px solid ${state.isFocused ? "var(--green-accent)" : "var(--border)"}`,
+    borderRadius: "8px",
+    boxShadow: "none",
+    minHeight: "38px",
+    "&:hover": { borderColor: "var(--border-hover)" },
+  }),
+  menu: (base: object) => ({
+    ...base,
+    background: "var(--bg-card)",
+    border: "1px solid var(--border)",
+    borderRadius: "8px",
+    boxShadow: "0 8px 24px rgba(0,0,0,0.4)",
+    overflow: "hidden",
+  }),
+  menuList: (base: object) => ({
+    ...base,
+    padding: "0.25rem",
+    maxHeight: "220px",
+  }),
+  option: (base: object, state: { isFocused: boolean; isSelected: boolean }) => ({
+    ...base,
+    background: state.isSelected
+      ? "var(--green-dark)"
+      : state.isFocused
+        ? "var(--bg-card-hover)"
+        : "transparent",
+    borderRadius: "6px",
+    color: "var(--text-primary)",
+    fontSize: "0.85rem",
+    padding: "0.4rem 0.75rem",
+    cursor: "pointer",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+  }),
+  singleValue: (base: object) => ({
+    ...base,
+    color: "var(--text-primary)",
+    fontSize: "0.875rem",
+  }),
+  placeholder: (base: object) => ({
+    ...base,
+    color: "var(--text-muted)",
+    fontSize: "0.875rem",
+  }),
+  input: (base: object) => ({
+    ...base,
+    color: "var(--text-primary)",
+    fontSize: "0.875rem",
+  }),
+  indicatorSeparator: () => ({ display: "none" }),
+  dropdownIndicator: (base: object) => ({
+    ...base,
+    color: "var(--text-muted)",
+    padding: "0 0.5rem",
+    "&:hover": { color: "var(--text-secondary)" },
+  }),
+  clearIndicator: (base: object) => ({
+    ...base,
+    color: "var(--text-muted)",
+    padding: "0 0.25rem",
+    "&:hover": { color: "var(--text-secondary)" },
+  }),
+  noOptionsMessage: (base: object) => ({
+    ...base,
+    color: "var(--text-muted)",
+    fontSize: "0.85rem",
+  }),
+};
 
 export default function PoliticianFilter({
   politicians,
@@ -23,6 +112,18 @@ export default function PoliticianFilter({
   const filteredPoliticians = politicians.filter(
     (p) => p.total_value >= minValue
   );
+
+  const options = toOptions(filteredPoliticians);
+  const selectedOption = selected
+    ? options.find((o) => o.value === selected.bioguide_id) ?? null
+    : null;
+
+  function handleChange(opt: Option | null) {
+    const pol = opt
+      ? (politicians.find((p) => p.bioguide_id === opt.value) ?? null)
+      : null;
+    onSelect(pol);
+  }
 
   return (
     <>
@@ -87,38 +188,25 @@ export default function PoliticianFilter({
         </div>
       </div>
 
-      <select
-        onChange={onSelect}
-        defaultValue=""
-        disabled={loading}
-        style={{
-          width: "100%",
-          padding: "0.65rem 1rem",
-          borderRadius: "8px",
-          border: "1px solid var(--border)",
-          background: "var(--bg-card)",
-          color: selected ? "var(--text-primary)" : "var(--text-muted)",
-          fontSize: "0.9rem",
-          cursor: "pointer",
-          marginBottom: "2rem",
-          appearance: "none",
-        }}
-      >
-        <option value="" disabled>
-          {loading ? "Loading members..." : "Select a member of Congress..."}
-        </option>
-        {filteredPoliticians.map((p) => (
-          <option key={p.bioguide_id} value={p.bioguide_id}>
-            {p.politician_name}
-            {p.politician_party
-              ? ` · ${p.politician_party === "republican" ? "🐘" : "🫏"}`
-              : ""}
-            {p.politician_chamber
-              ? ` · ${p.politician_chamber === "senate" ? "Senate" : "House"}`
-              : ""}
-          </option>
-        ))}
-      </select>
+      <div style={{ marginBottom: "2rem" }}>
+        <Select<Option>
+          options={options}
+          value={selectedOption}
+          onChange={handleChange}
+          isLoading={loading}
+          isDisabled={loading}
+          isClearable
+          placeholder="Search members..."
+          noOptionsMessage={() => "No members found"}
+          formatOptionLabel={(opt) => (
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <span>{opt.label}</span>
+              <span style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>{opt.meta}</span>
+            </div>
+          )}
+          styles={selectStyles}
+        />
+      </div>
     </>
   );
 }
