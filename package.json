@@ -40,5 +40,8 @@
   },
   "peerDependencies": {
     "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "framer-motion": "^12.38.0"
   }
 }

@@ -128,7 +128,7 @@ export default function TradeTable({
                         />
                       </label>
                     </th>
-                    {["Ticker", "Type", "Value"].map((h) => (
+                    {["Ticker", "Value"].map((h) => (
                       <th
                         key={h}
                         style={{

@@ -11,7 +11,7 @@ function NavBar(): React.ReactElement {
 
   return (
     <nav className="navbar">
-      <span className="nav-brand">Alex Steeves</span>
+      <NavLink to="/" end className="nav-brand">Alex Steeves</NavLink>
 
       <div className="nav-links">
         <NavLink

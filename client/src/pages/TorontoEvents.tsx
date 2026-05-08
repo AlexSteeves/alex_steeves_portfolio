@@ -1,7 +1,19 @@
 // Fetches all upcoming City of Toronto events once, then filters and paginates client-side.
 import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import type { TorontoEvent, TorontoEventsResponse } from "shared";
 import EventCard from "../components/toronto/EventCard";
+
+const LOADING_WORDS = [
+  "Plotting",
+  "Scheming",
+  "Pondering",
+  "Deliberating",
+  "Calculating",
+  "Reasoning",
+  "Contemplating",
+  "Strategizing",
+];
 
 const SERVER_URL = import.meta.env.DEV ? "http://localhost:3000/api" : "/api";
 const PAGE_SIZE = 50;
@@ -12,6 +24,16 @@ export default function TorontoEvents() {
   const [freeOnly, setFreeOnly] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [wordIdx, setWordIdx] = useState(0);
+
+  useEffect(() => {
+    if (!loading) return;
+    const id = setInterval(
+      () => setWordIdx((i) => (i + 1) % LOADING_WORDS.length),
+      1500,
+    );
+    return () => clearInterval(id);
+  }, [loading]);
 
   useEffect(() => {
     fetch(`${SERVER_URL}/toronto-events?limit=50`)
@@ -67,12 +89,35 @@ export default function TorontoEvents() {
       </div>
 
       {loading && (
-        <p
-          className="toronto-count"
-          style={{ textAlign: "center", padding: "3rem 0" }}
-        >
-          Loading… (fetching from Toronto Open Data, may take a moment)
-        </p>
+        <div style={{ textAlign: "center", padding: "4rem 0" }}>
+          <div className="spinner" style={{ margin: "0 auto 1.5rem" }} />
+          <div
+            style={{
+              position: "relative",
+              height: "1.5rem",
+              overflow: "hidden",
+            }}
+          >
+            <AnimatePresence mode="wait">
+              <motion.p
+                key={wordIdx}
+                initial={{ x: 20, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                exit={{ x: -20, opacity: 0 }}
+                transition={{ duration: 0.3, ease: [0.33, 1, 0.68, 1] }}
+                style={{
+                  position: "absolute",
+                  width: "100%",
+                  fontSize: "0.875rem",
+                  color: "var(--text-muted)",
+                  margin: 0,
+                }}
+              >
+                {LOADING_WORDS[wordIdx]}...
+              </motion.p>
+            </AnimatePresence>
+          </div>
+        </div>
       )}
 
       {error && <p className="toronto-empty">Failed to load events: {error}</p>}

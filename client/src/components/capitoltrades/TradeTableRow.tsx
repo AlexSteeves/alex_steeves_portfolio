@@ -51,19 +51,13 @@ export default function TradeTableRow({
           </span>
         )}
       </td>
-      <td style={{ padding: "0.7rem 1.25rem" }}>
-        <span
-          className={`badge ${t.tx_type === "buy" ? "badge-green" : "badge-red"}`}
-        >
-          {t.tx_type ?? "—"}
-        </span>
-      </td>
       <td
         style={{
           padding: "0.7rem 1.25rem",
-          color: "var(--text-secondary)",
+          color: t.tx_type === "buy" ? "var(--green-bright)" : "var(--red-accent)",
           fontSize: "0.85rem",
           whiteSpace: "nowrap",
+          fontWeight: 500,
         }}
       >
         {t.value ?? "—"}
