@@ -3,6 +3,7 @@ import Hero from "../components/portfolio/Hero";
 import About from "../components/portfolio/About";
 import Experience from "../components/portfolio/Experience";
 import Skills from "../components/portfolio/Skills";
+import Projects from "../components/portfolio/Projects";
 import Contact from "../components/portfolio/Contact";
 
 const Portfolio: React.FC = () => {
@@ -12,6 +13,7 @@ const Portfolio: React.FC = () => {
       <About />
       <Experience />
       <Skills />
+      <Projects />
       <Contact />
     </main>
   );

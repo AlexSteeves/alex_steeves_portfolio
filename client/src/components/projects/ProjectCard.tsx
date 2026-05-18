@@ -3,8 +3,8 @@ import type { Project } from "./projects";
 export default function ProjectCard({ project }: { project: Project }) {
   return (
     <div className="card experience-card">
-      <div className="experience-header">
-        <div>
+      <div className="experience-header" style={{ flexWrap: "nowrap", alignItems: "center" }}>
+        <div style={{ minWidth: 0 }}>
           <a
             href={project.url}
             target="_blank"

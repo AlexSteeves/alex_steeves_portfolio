@@ -14,8 +14,8 @@ const slideMask = {
 };
 
 const proofItems = [
-  { number: "Gov", label: "Federal workflow automation" },
-  { number: "SaaS", label: "Full platform rebuild" },
+  { number: "50%", label: "Navigation time cut" },
+  { number: "80%", label: "Officer time saved" },
   { number: "2+", label: "Years in production" },
 ];
 
@@ -37,9 +37,9 @@ const Hero: React.FC = () => {
       </div>
 
       <p className="hero-tagline">
-        I build full-stack software that does things people notice. Government
-        automation that meaningfully changed how officers work. A SaaS platform
-        rebuilt from the ground up. Live data tools I ship in my own time.
+        Backend services, React frontends, database schemas. I work across the
+        full stack at federal agencies and startups. Everything ships to
+        production and gets used by real teams.
       </p>
 
       <div className="hero-proof">
@@ -62,7 +62,7 @@ const Hero: React.FC = () => {
       </div>
 
       <div className="hero-stack">
-        {["TypeScript", "React", "Python", "SQL", "Cloudflare"].map((tech) => (
+        {["TypeScript", "Python", "React", "Docker", "FastAPI", "Java", "Postgres", "Spring Boot"].map((tech) => (
           <span key={tech} className="hero-stack-chip">
             {tech}
           </span>

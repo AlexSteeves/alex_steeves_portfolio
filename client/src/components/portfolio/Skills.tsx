@@ -1,18 +1,19 @@
 import type React from "react";
 
 const skills: string[] = [
+  "Python",
+  "FastAPI",
+  "Java",
+  "Spring Boot",
   "TypeScript",
   "React",
-  "Next.js",
-  "Java",
+  "Postgres",
+  "Docker",
   "SQL",
   "Hono",
-  "Vite",
-  "Bun",
   "Cloudflare",
-  "GCP",
-  "Node.js",
   "Git",
+  "GCP",
 ];
 
 const Skills: React.FC = () => {

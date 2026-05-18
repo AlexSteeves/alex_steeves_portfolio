@@ -11,7 +11,9 @@ function NavBar(): React.ReactElement {
 
   return (
     <nav className="navbar">
-      <NavLink to="/" end className="nav-brand">Alex Steeves</NavLink>
+      <NavLink to="/" end className="nav-brand">
+        Alex Steeves
+      </NavLink>
 
       <div className="nav-links">
         <NavLink
@@ -26,6 +28,18 @@ function NavBar(): React.ReactElement {
           className={({ isActive }) => `nav-link${isActive ? " active" : ""}`}
         >
           Senate Watch
+        </NavLink>
+        <NavLink
+          to="/projects"
+          className={({ isActive }) => `nav-link${isActive ? " active" : ""}`}
+        >
+          Projects
+        </NavLink>
+        <NavLink
+          to="/toronto-events"
+          className={({ isActive }) => `nav-link${isActive ? " active" : ""}`}
+        >
+          Toronto Events
         </NavLink>
 
         <div className="burger-wrapper">
@@ -63,7 +77,7 @@ function NavBar(): React.ReactElement {
                 <NavLink
                   to="/projects"
                   className={({ isActive }) =>
-                    `burger-link${isActive ? " active" : ""}`
+                    `burger-link mobile-only${isActive ? " active" : ""}`
                   }
                   onClick={close}
                 >
@@ -72,7 +86,7 @@ function NavBar(): React.ReactElement {
                 <NavLink
                   to="/toronto-events"
                   className={({ isActive }) =>
-                    `burger-link${isActive ? " active" : ""}`
+                    `burger-link mobile-only${isActive ? " active" : ""}`
                   }
                   onClick={close}
                 >

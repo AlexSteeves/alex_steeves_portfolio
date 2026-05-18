@@ -15,9 +15,9 @@ const experiences: ExperienceItem[] = [
     role: "Software Developer",
     period: "July 2024 – Feb 2026",
     highlights: [
-      "Refactored front-end architecture using TypeScript and React Query to implement a fully responsive UI, reducing navigation time by 50% and ensuring cross-platform compatibility.",
-      "Architected and managed PostgreSQL schemas and relational models, utilizing Alembic for database migrations to maintain version control and data integrity across environments.",
-      "Developed modular Python backend services and calculation engines, focusing on code reusability and high-performance processing for core application logic.",
+      "Cut navigation time 50% by refactoring the front end with TypeScript and React Query into a fully responsive UI.",
+      "Designed PostgreSQL schemas and ran Alembic migrations across all environments with zero data integrity issues.",
+      "Built modular Python backend services and calculation engines that power the core SaaS application in production.",
     ],
   },
   {
@@ -26,8 +26,8 @@ const experiences: ExperienceItem[] = [
     role: "Data Analyst",
     period: "May 2023 – Sept 2023",
     highlights: [
-      "Identified and fixed a 50% data discrepancy between the legacy and new databases using Excel and SAS Viya, ensuring data integrity and preventing potential data loss.",
-      "Streamlined data processing and analysis by creating efficient reports using Cognos BI, improving reporting speed by 20%.",
+      "Fixed a 50% data discrepancy between legacy and new databases before it caused data loss.",
+      "Cut reporting time 20% by building Cognos BI reports that replaced manual data processing.",
     ],
   },
   {
@@ -36,8 +36,8 @@ const experiences: ExperienceItem[] = [
     role: "Software Developer",
     period: "Jan 2022 – Jan 2023",
     highlights: [
-      "Developed a component to automate email distribution using Java, SQL, and Apache POI, saving officers 80% of their time and increasing operational efficiency.",
-      "Built a component that streamlined the storing and populating of boilerplate documents, saving officers hours of manual entry and improving document management efficiency.",
+      "Saved officers 80% of their manual work by automating email distribution with Java, SQL, and Apache POI.",
+      "Eliminated hours of manual entry for federal officers by building a document automation tool for boilerplate generation.",
     ],
   },
 ];
@@ -46,26 +46,32 @@ const Experience: React.FC = () => {
   return (
     <section className="section">
       <h2 className="section-title">Experience</h2>
-      <div className="experience-list">
+      <div className="experience-timeline">
         {experiences.map((exp) => (
-          <div key={exp.company} className="card experience-card">
-            <div className="experience-header">
-              <div>
-                <h3 className="experience-company">{exp.company}</h3>
-                <p className="experience-role">{exp.role}</p>
-              </div>
-              <div className="experience-meta">
-                {exp.period && (
-                  <span className="experience-period">{exp.period}</span>
-                )}
-                <span className="experience-location">{exp.location}</span>
-              </div>
+          <div key={exp.company} className="timeline-item">
+            <div className="timeline-marker">
+              <div className="timeline-dot" />
+              <div className="timeline-line" />
             </div>
-            <ul className="experience-highlights">
-              {exp.highlights.map((highlight) => (
-                <li key={highlight}>{highlight}</li>
-              ))}
-            </ul>
+            <div className="timeline-content">
+              <div className="experience-header">
+                <div>
+                  <h3 className="experience-company">{exp.company}</h3>
+                  <p className="experience-role">{exp.role}</p>
+                </div>
+                <div className="experience-meta">
+                  {exp.period && (
+                    <span className="experience-period">{exp.period}</span>
+                  )}
+                  <span className="experience-location">{exp.location}</span>
+                </div>
+              </div>
+              <ul className="experience-highlights">
+                {exp.highlights.map((highlight) => (
+                  <li key={highlight}>{highlight}</li>
+                ))}
+              </ul>
+            </div>
           </div>
         ))}
       </div>

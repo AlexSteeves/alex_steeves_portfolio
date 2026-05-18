@@ -6,14 +6,14 @@ const About: React.FC = () => {
       <h2 className="section-title">About</h2>
       <div className="card about-card">
         <p className="about-text">
-          Computer Engineering grad with 2+ years of production experience at
-          government agencies and a SaaS startup. I've automated federal
-          workflows, rebuilt platforms from the ground up, and shipped data
-          tools as projects I actually use. I work across the whole stack:
-          Python backends, SQL schemas, React UIs. I care about writing software
-          that's fast, maintainable, and does exactly what it's supposed to. I
-          use AI tools in my workflow to move faster without cutting corners on
-          quality or understanding.
+          Computer Engineering grad with 2+ years of production experience
+          across federal agencies and Autocase, a SaaS tool for LEED
+          cost-benefit analysis. I've cut navigation time by 50%, saved officers
+          80% of their manual work, and caught a 50% data discrepancy between
+          legacy databases before it caused data loss. I work across the full
+          stack: Python, FastAPI, Java, Spring Boot, React, TypeScript,
+          Postgres, and Docker. I use AI tools to move faster without losing
+          sight of the problem.
         </p>
       </div>
     </section>

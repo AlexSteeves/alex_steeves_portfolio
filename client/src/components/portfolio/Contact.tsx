@@ -6,13 +6,12 @@ const Contact: React.FC = () => {
       <h2 className="section-title">Contact</h2>
       <div className="card contact-card">
         <p className="contact-text">
-          Open to new opportunities, collaborations, or just a good conversation
-          about software. Feel free to reach out through any of the channels
-          below.
+          "Available for full-stack roles. Hiring or have a problem worth
+          solving? Send an email."
         </p>
         <div className="contact-links">
           <a href="mailto:alqusteeves@gmail.com" className="btn btn-primary">
-            Email ↗
+            Send an Email ↗
           </a>
           <a
             href="https://github.com/AlexSteeves"

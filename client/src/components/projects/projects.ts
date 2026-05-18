@@ -8,14 +8,35 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    name: "Engram",
+    description:
+      "AI memory layer that syncs Obsidian, Gmail, and Slack into Postgres so Claude starts every session warm.",
+    url: "https://github.com/AlexSteeves/engram",
+    tags: ["Python", "Postgres", "Claude AI", "Obsidian", "Slack", "Gmail"],
+    highlights: [
+      "Syncs notes, emails, and messages into a single Postgres database Claude can query at session start.",
+      "Eliminates context re-setup. Claude surfaces relevant history before the first prompt.",
+      "Unified ingestion pipeline across Obsidian vaults, Gmail inbox, and Slack channels.",
+    ],
+  },
+  {
     name: "StatementLens",
     description:
-      "A local bank statement analyzer that processes CSV exports into categorized spending breakdowns, monthly trends, and AI-generated financial insights. Keeps sensitive financial data fully local while using Claude via MCP to reason transparently over your transactions.",
+      "Upload a bank statement CSV, get categorized spending and AI insights. Financial data never leaves your machine.",
     url: "https://github.com/AlexSteeves/statement-lens",
-    tags: ["Java", "Spring Boot", "Spring AI", "React", "TypeScript", "Tailwind CSS", "Claude AI", "MCP"],
+    tags: [
+      "Java",
+      "Spring Boot",
+      "Spring AI",
+      "React",
+      "TypeScript",
+      "Tailwind CSS",
+      "Claude AI",
+      "MCP",
+    ],
     highlights: [
       "Uploads TD credit card CSV exports and runs agentic AI analysis via MCP servers exposed as callable tools (getSpendingByCategory, getMonthlyTrend).",
-      "Shows Claude's step-by-step reasoning as it categorizes transactions — no black-box outputs.",
+      "Shows Claude's step-by-step reasoning as it categorizes transactions. No black-box outputs.",
       "Generates spending category breakdowns, merchant summaries, and monthly trend visualizations.",
       "Runs entirely locally so sensitive financial data never leaves the machine.",
     ],
@@ -23,14 +44,14 @@ export const projects: Project[] = [
   {
     name: "EarningsLensAI",
     description:
-      "A RAG-powered document analysis tool for interrogating earnings call transcripts and 10-K filings in plain English. Upload a PDF, ask questions like \"What did management say about revenue guidance?\", and get grounded answers with source citations — no digging through 80-page documents.",
+      "Ask plain English questions about any earnings call or 10-K. Answers come with source citations. No digging through 80-page documents.",
     url: "https://github.com/AlexSteeves/EarningsLensAI",
     tags: ["Python", "FastAPI", "React", "TypeScript", "ChromaDB", "Claude AI"],
     highlights: [
       "Chunks documents into 500-word overlapping segments and embeds them in ChromaDB for semantic retrieval.",
       "Retrieves the top 5 most relevant passages per query and passes them to Claude haiku for grounded, citation-backed answers.",
       "FastAPI backend with a React/TypeScript frontend, deployable via Docker Compose.",
-      "Built for financial analysis workflows — earnings calls, 10-K filings, and investor transcripts.",
+      "Built for financial analysis workflows: earnings calls, 10-K filings, and investor transcripts.",
     ],
   },
   {
