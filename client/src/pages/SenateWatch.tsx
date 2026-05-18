@@ -98,37 +98,28 @@ export default function SenateWatch() {
           Senate Watch
         </h1>
         <div
-          style={{ display: "flex", flexDirection: "column", gap: "0.25rem" }}
+          style={{ display: "flex", flexDirection: "column", gap: "0.6rem", maxWidth: "780px", borderLeft: "2px solid var(--green-accent)", paddingLeft: "1rem" }}
         >
-          <p style={{ color: "var(--text-secondary)", fontSize: "0.875rem" }}>
-            Senate trades are sourced from{" "}
-            <a
-              href="https://capitoltrades.com"
-              target="_blank"
-              rel="noreferrer"
-              style={{ color: "var(--green-bright)" }}
-            >
-              Capitol Trades
-            </a>
-            .
+          <p style={{ color: "var(--text-secondary)", fontSize: "0.875rem", lineHeight: 1.7 }}>
+            Members of Congress trade stocks in the same industries their committees regulate.
+            This tool puts those two things side by side so you can judge the overlap yourself.
           </p>
 
-          <p style={{ color: "var(--text-secondary)", fontSize: "0.875rem" }}>
-            Committee memberships sourced from the{" "}
-            <a
-              href="https://github.com/unitedstates/congress-legislators"
-              target="_blank"
-              rel="noreferrer"
-              style={{ color: "var(--green-bright)" }}
-            >
+          <p style={{ color: "var(--text-secondary)", fontSize: "0.875rem", lineHeight: 1.7 }}>
+            Trade data comes from{" "}
+            <a href="https://capitoltrades.com" target="_blank" rel="noreferrer" style={{ color: "var(--green-bright)" }}>
+              Capitol Trades
+            </a>
+            . Committee memberships come from the{" "}
+            <a href="https://github.com/unitedstates/congress-legislators" target="_blank" rel="noreferrer" style={{ color: "var(--green-bright)" }}>
               unitedstates/congress-legislators
             </a>{" "}
             open data project.
           </p>
 
-          <p style={{ color: "var(--text-secondary)", fontSize: "0.875rem" }}>
-            Use the slider to filter members by total traded value, then select
-            a member to view their committee assignments and individual trades.
+          <p style={{ color: "var(--text-secondary)", fontSize: "0.875rem", lineHeight: 1.7 }}>
+            Use the slider to filter by total traded value. Select a member to see their committee
+            assignments and individual trades together.
           </p>
         </div>
       </div>

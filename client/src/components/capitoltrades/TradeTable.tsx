@@ -101,32 +101,16 @@ export default function TradeTable({
                         whiteSpace: "nowrap",
                       }}
                     >
-                      <label
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "0.4rem",
-                          cursor: "pointer",
-                          color: "var(--text-muted)",
-                          fontWeight: 600,
-                          fontSize: "0.72rem",
-                          textTransform: "uppercase",
-                          letterSpacing: "0.08em",
-                        }}
-                      >
-                        Date
-                        <input
-                          type="checkbox"
-                          checked={friendlyDate}
-                          onChange={(e) =>
-                            onFriendlyDateChange(e.target.checked)
-                          }
-                          style={{
-                            cursor: "pointer",
-                            accentColor: "var(--green-bright)",
-                          }}
-                        />
-                      </label>
+                      <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                        <span style={{ color: "var(--text-muted)", fontWeight: 600, fontSize: "0.72rem", textTransform: "uppercase", letterSpacing: "0.08em" }}>Date</span>
+                        <div style={{ display: "flex", background: "var(--bg-primary)", borderRadius: "6px", padding: "2px", border: "1px solid var(--border)" }}>
+                          {[{ label: "ISO", val: false }, { label: "Friendly", val: true }].map(({ label, val }) => (
+                            <button key={label} onClick={() => onFriendlyDateChange(val)} style={{ padding: "0.2rem 0.55rem", borderRadius: "4px", border: "none", fontSize: "0.7rem", fontWeight: 600, cursor: "pointer", transition: "all 0.2s ease", background: friendlyDate === val ? "var(--green-mid)" : "transparent", color: friendlyDate === val ? "var(--green-light)" : "var(--text-muted)", letterSpacing: "0.04em" }}>
+                              {label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
                     </th>
                     {["Ticker", "Value"].map((h) => (
                       <th
