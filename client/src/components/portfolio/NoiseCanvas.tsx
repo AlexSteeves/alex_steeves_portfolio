@@ -81,7 +81,7 @@ const FRAG = `
   /* ── Main ───────────────────────────────────────────────────────── */
   void main(){
     vec2 uv = gl_FragCoord.xy / uResolution;
-    float t  = uTime * 0.028;  // very slow drift
+    float t  = uTime * 0.07;  // very slow drift
 
     /* Domain warp — two fbm samples displace the UV before the
        final colour lookup, producing the organic flowing shapes */
