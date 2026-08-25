@@ -14,7 +14,8 @@ function NavBar(): React.ReactElement {
   return (
     <nav className="navbar">
       <NavLink to="/" end className="nav-brand">
-        Alex Steeves
+        <span className="mobile-hide">Alex Steeves</span>
+        <span className="mobile-show">Alex S.</span>
       </NavLink>
 
       <div className="nav-links">

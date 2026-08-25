@@ -35,7 +35,9 @@ const Hero: React.FC = () => {
 
       {/* All content sits above the gradient, constrained to page width */}
       <div className="hero-content">
-        <p className="hero-label">Data Platform & Analytics Engineer</p>
+        <p className="hero-label">
+          Data Platform &<br className="mobile-show" /> Analytics Engineer
+        </p>
         <span className="hero-mark" aria-hidden="true" />
 
         <div className="line-mask" style={{ marginBottom: "1.5rem" }}>
@@ -50,11 +52,16 @@ const Hero: React.FC = () => {
           </motion.h1>
         </div>
 
-        <p className="hero-tagline">
+        <p className="hero-tagline mobile-hide">
           I design database schemas, build data pipelines, and ship the
           backend services that turn raw data into reports people actually
           use. My work has run in production at federal agencies and a SaaS
           analytics platform for two years.
+        </p>
+        <p className="hero-tagline mobile-show">
+          I build data pipelines and backend services that turn raw data
+          into reports people use, in production at federal agencies and a
+          SaaS platform for 2+ years.
         </p>
 
         <div className="hero-proof">

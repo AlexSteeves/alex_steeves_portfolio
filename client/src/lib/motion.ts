@@ -2,7 +2,7 @@ import type { Variants } from "framer-motion";
 
 export const easeOut = [0.33, 1, 0.68, 1] as const;
 
-export const viewportOnce = { once: true, amount: 0.3 };
+export const viewportOnce = { once: true, amount: 0.1 };
 
 export const slideMask: Variants = {
   initial: { y: "100%" },

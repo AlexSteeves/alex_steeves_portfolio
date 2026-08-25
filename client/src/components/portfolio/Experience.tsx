@@ -1,8 +1,6 @@
 import type React from "react";
-import { Fragment } from "react";
 import { motion } from "framer-motion";
 import { staggerContainer, fadeInUp, viewportOnce } from "../../lib/motion";
-import TimelineDivider from "./TimelineDivider";
 
 interface ExperienceItem {
   company: string;
@@ -69,31 +67,28 @@ const Experience: React.FC = () => {
         whileInView="enter"
         viewport={viewportOnce}
       >
-        {experiences.map((exp, i) => (
-          <Fragment key={exp.company}>
-            {i > 0 && <TimelineDivider index={i - 1} />}
-            <motion.div className="timeline-item" variants={fadeInUp}>
-              <div className="timeline-content">
-                <div className="experience-header">
-                  <div>
-                    <h3 className="experience-company">{exp.company}</h3>
-                    <p className="experience-role">{exp.role}</p>
-                  </div>
-                  <div className="experience-meta">
-                    {exp.period && (
-                      <span className="experience-period">{exp.period}</span>
-                    )}
-                    <span className="experience-location">{exp.location}</span>
-                  </div>
+        {experiences.map((exp) => (
+          <motion.div key={exp.company} className="timeline-item" variants={fadeInUp}>
+            <div className="timeline-content">
+              <div className="experience-header">
+                <div>
+                  <h3 className="experience-company">{exp.company}</h3>
+                  <p className="experience-role">{exp.role}</p>
                 </div>
-                <ul className="experience-highlights">
-                  {exp.highlights.map((highlight) => (
-                    <li key={highlight}>{highlight}</li>
-                  ))}
-                </ul>
+                <div className="experience-meta">
+                  {exp.period && (
+                    <span className="experience-period">{exp.period}</span>
+                  )}
+                  <span className="experience-location">{exp.location}</span>
+                </div>
               </div>
-            </motion.div>
-          </Fragment>
+              <ul className="experience-highlights">
+                {exp.highlights.map((highlight) => (
+                  <li key={highlight}>{highlight}</li>
+                ))}
+              </ul>
+            </div>
+          </motion.div>
         ))}
       </motion.div>
     </section>
