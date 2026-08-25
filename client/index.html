@@ -3,12 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      (function () {
+        var stored = localStorage.getItem("theme");
+        document.documentElement.dataset.theme = stored === "dark" ? "dark" : "light";
+      })();
+    </script>
 
     <!-- Primary -->
     <title>Alex Steeves</title>
     <meta
       name="description"
-      content="Software developer and Computer Engineering graduate specializing in TypeScript, React, and full-stack web applications."
+      content="Data Platform &amp; Analytics Engineer and Computer Engineering graduate specializing in Python, PostgreSQL, and data-driven backend systems."
     />
     <meta name="author" content="Alex Steeves" />
     <meta name="robots" content="index, follow" />
@@ -16,10 +22,10 @@
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://alexsteeves.dev" />
-    <meta property="og:title" content="Alex Steeves | Software Developer" />
+    <meta property="og:title" content="Alex Steeves | Data Platform &amp; Analytics Engineer" />
     <meta
       property="og:description"
-      content="Software developer and Computer Engineering graduate specializing in TypeScript, React, and full-stack web applications."
+      content="Data Platform &amp; Analytics Engineer and Computer Engineering graduate specializing in Python, PostgreSQL, and data-driven backend systems."
     />
     <meta property="og:locale" content="en_CA" />
 
@@ -29,7 +35,7 @@
         "@context": "https://schema.org",
         "@type": "Person",
         "name": "Alex Steeves",
-        "jobTitle": "Software Developer",
+        "jobTitle": "Data Platform & Analytics Engineer",
         "email": "alqusteeves@gmail.com",
         "url": "https://alexsteeves.dev",
         "sameAs": [
@@ -39,12 +45,18 @@
       }
     </script>
 
-    <meta name="theme-color" content="#0e0e0e" />
+    <meta name="theme-color" content="#f6f5f2" />
     <link rel="icon" type="image/png" sizes="96x96" href="/favicon/favicon-96x96.png" />
-    <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
     <link rel="shortcut icon" href="/favicon/favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
     <link rel="manifest" href="/favicon/site.webmanifest" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@300;400;500;600&display=swap"
+    />
   </head>
   <body>
     <div id="root"></div>

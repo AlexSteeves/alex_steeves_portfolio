@@ -1,9 +1,11 @@
 // Sticky top navigation with a burger dropdown for secondary links.
-// On desktop the dropdown holds Projects and Toronto Events.
+// On desktop the dropdown holds Projects.
 // On mobile all links collapse into the dropdown.
 import type React from "react";
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import ThemeToggle from "./ThemeToggle";
 
 function NavBar(): React.ReactElement {
   const [open, setOpen] = useState(false);
@@ -24,23 +26,13 @@ function NavBar(): React.ReactElement {
           Portfolio
         </NavLink>
         <NavLink
-          to="/senate-watch"
-          className={({ isActive }) => `nav-link${isActive ? " active" : ""}`}
-        >
-          Senate Watch
-        </NavLink>
-        <NavLink
           to="/projects"
           className={({ isActive }) => `nav-link${isActive ? " active" : ""}`}
         >
           Projects
         </NavLink>
-        <NavLink
-          to="/toronto-events"
-          className={({ isActive }) => `nav-link${isActive ? " active" : ""}`}
-        >
-          Toronto Events
-        </NavLink>
+
+        <ThemeToggle />
 
         <div className="burger-wrapper">
           <button
@@ -51,50 +43,47 @@ function NavBar(): React.ReactElement {
             {open ? "✕" : "☰"}
           </button>
 
-          {open && (
-            <>
-              <div className="burger-backdrop" onClick={close} />
-              <div className="burger-dropdown">
-                <NavLink
-                  to="/"
-                  end
-                  className={({ isActive }) =>
-                    `burger-link mobile-only${isActive ? " active" : ""}`
-                  }
+          <AnimatePresence>
+            {open && (
+              <>
+                <motion.div
+                  className="burger-backdrop"
                   onClick={close}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                />
+                <motion.div
+                  className="burger-dropdown"
+                  initial={{ opacity: 0, y: -8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.2 }}
                 >
-                  Portfolio
-                </NavLink>
-                <NavLink
-                  to="/senate-watch"
-                  className={({ isActive }) =>
-                    `burger-link mobile-only${isActive ? " active" : ""}`
-                  }
-                  onClick={close}
-                >
-                  Senate Watch
-                </NavLink>
-                <NavLink
-                  to="/projects"
-                  className={({ isActive }) =>
-                    `burger-link mobile-only${isActive ? " active" : ""}`
-                  }
-                  onClick={close}
-                >
-                  Projects
-                </NavLink>
-                <NavLink
-                  to="/toronto-events"
-                  className={({ isActive }) =>
-                    `burger-link mobile-only${isActive ? " active" : ""}`
-                  }
-                  onClick={close}
-                >
-                  Toronto Events
-                </NavLink>
-              </div>
-            </>
-          )}
+                  <NavLink
+                    to="/"
+                    end
+                    className={({ isActive }) =>
+                      `burger-link mobile-only${isActive ? " active" : ""}`
+                    }
+                    onClick={close}
+                  >
+                    Portfolio
+                  </NavLink>
+                  <NavLink
+                    to="/projects"
+                    className={({ isActive }) =>
+                      `burger-link mobile-only${isActive ? " active" : ""}`
+                    }
+                    onClick={close}
+                  >
+                    Projects
+                  </NavLink>
+                </motion.div>
+              </>
+            )}
+          </AnimatePresence>
         </div>
       </div>
     </nav>

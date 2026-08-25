@@ -1,21 +1,9 @@
 import type React from "react";
-import { useEffect, useRef } from "react";
-import { motion } from "framer-motion";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import NoiseCanvas from "./NoiseCanvas";
-
-const slideMask = {
-  initial: { y: "100%" },
-  enter: (i: number) => ({
-    y: "0%",
-    transition: {
-      duration: 0.75,
-      ease: [0.33, 1, 0.68, 1] as const,
-      delay: 0.075 * i,
-    },
-  }),
-};
+import { slideMask } from "../../lib/motion";
+import { CONTACT_EMAIL, GITHUB_URL, LINKEDIN_URL } from "../../lib/constants";
 
 const proofItems = [
   { number: "50%", label: "Navigation time cut" },
@@ -25,63 +13,30 @@ const proofItems = [
 
 const Hero: React.FC = () => {
   const sectionRef = useRef<HTMLElement>(null);
-  const gradientRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-
-    const ctx = gsap.context(() => {
-      gsap.to(gradientRef.current, {
-        y: "40vh",
-        ease: "none",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top top",
-          end: "bottom top",
-          scrub: true,
-        },
-      });
-    });
-
-    return () => ctx.revert();
-  }, []);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+  const parallaxY = useTransform(scrollYProgress, [0, 1], ["0vh", "40vh"]);
 
   return (
     <section className="hero-section" ref={sectionRef}>
-      {/* Parallax noise layer — GSAP translates this wrapper on scroll */}
-      <div
-        ref={gradientRef}
+      {/* Parallax noise layer — translated on scroll via useScroll/useTransform */}
+      <motion.div
         aria-hidden="true"
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          width: "100%",
-          height: "140vh",
-          zIndex: 0,
-          willChange: "transform",
-          overflow: "hidden",
-        }}
+        className="hero-parallax-layer"
+        style={{ y: parallaxY }}
       >
         <NoiseCanvas />
-      </div>
+      </motion.div>
+
+      {/* Fades the smoke into the flat page background instead of a hard cutoff */}
+      <div className="hero-fade" aria-hidden="true" />
 
       {/* All content sits above the gradient, constrained to page width */}
-      <div
-        style={{
-          position: "relative",
-          zIndex: 1,
-          maxWidth: "1300px",
-          width: "100%",
-          margin: "0 auto",
-          padding: "0 1rem",
-        }}
-      >
-        <p className="hero-label">Full-Stack Developer</p>
-        <span className="hero-plus" aria-hidden="true">
-          +
-        </span>
+      <div className="hero-content">
+        <p className="hero-label">Data Platform & Analytics Engineer</p>
+        <span className="hero-mark" aria-hidden="true" />
 
         <div className="line-mask" style={{ marginBottom: "1.5rem" }}>
           <motion.h1
@@ -96,9 +51,10 @@ const Hero: React.FC = () => {
         </div>
 
         <p className="hero-tagline">
-          Backend services, React frontends, database schemas. I work across the
-          full stack at federal agencies and startups. Everything ships to
-          production and gets used by real teams.
+          I design database schemas, build data pipelines, and ship the
+          backend services that turn raw data into reports people actually
+          use. My work has run in production at federal agencies and a SaaS
+          analytics platform for two years.
         </p>
 
         <div className="hero-proof">
@@ -120,41 +76,14 @@ const Hero: React.FC = () => {
           ))}
         </div>
 
-        <div className="hero-stack">
-          {[
-            "TypeScript",
-            "Python",
-            "React",
-            "Docker",
-            "FastAPI",
-            "Java",
-            "Postgres",
-            "Spring Boot",
-          ].map((tech) => (
-            <span key={tech} className="hero-stack-chip">
-              {tech}
-            </span>
-          ))}
-        </div>
-
         <div className="hero-links">
-          <a href="mailto:alqusteeves@gmail.com" className="btn btn-primary">
+          <a href={`mailto:${CONTACT_EMAIL}`} className="btn btn-primary">
             Get in Touch
           </a>
-          <a
-            href="https://github.com/AlexSteeves"
-            target="_blank"
-            rel="noreferrer"
-            className="btn"
-          >
+          <a href={GITHUB_URL} target="_blank" rel="noreferrer" className="btn">
             GitHub ↗
           </a>
-          <a
-            href="https://linkedin.com/in/alexander-steeves/"
-            target="_blank"
-            rel="noreferrer"
-            className="btn"
-          >
+          <a href={LINKEDIN_URL} target="_blank" rel="noreferrer" className="btn">
             LinkedIn ↗
           </a>
         </div>

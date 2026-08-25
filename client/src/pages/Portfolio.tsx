@@ -4,15 +4,15 @@ import Hero from "../components/portfolio/Hero";
 import About from "../components/portfolio/About";
 import Experience from "../components/portfolio/Experience";
 import Skills from "../components/portfolio/Skills";
-import Projects from "../components/portfolio/Projects";
+import ProjectsSection from "../components/portfolio/ProjectsSection";
 import Contact from "../components/portfolio/Contact";
 
 const Portfolio: React.FC = () => {
   useEffect(() => {
     // Prevent the browser from restoring the previous scroll position on
-    // refresh — if it does, GSAP ScrollTrigger initialises with a non-zero
-    // scroll and applies a partial y-transform to the gradient before the
-    // page snaps back to the top, making it look like the height changes.
+    // refresh — if it does, Hero's scroll-linked parallax (useScroll) reads
+    // a non-zero scroll and applies a partial y-transform to the noise layer
+    // before the page snaps back to the top, making it look like the height changes.
     window.history.scrollRestoration = "manual";
     window.scrollTo(0, 0);
 
@@ -31,7 +31,7 @@ const Portfolio: React.FC = () => {
         <About />
         <Experience />
         <Skills />
-        <Projects />
+        <ProjectsSection />
         <Contact />
       </div>
     </main>

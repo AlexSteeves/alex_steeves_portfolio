@@ -14,9 +14,7 @@
     "dev": "wrangler dev --config ../wrangler.jsonc"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.49.4",
-    "hono": "^4.10.8",
-    "shared": "workspace:*"
+    "hono": "^4.10.8"
   },
   "devDependencies": {
     "@types/bun": "latest"

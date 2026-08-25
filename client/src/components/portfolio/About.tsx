@@ -1,53 +1,46 @@
 import type React from "react";
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { motion } from "framer-motion";
+import { staggerContainer, wordReveal, viewportOnce } from "../../lib/motion";
 
-const aboutText =
-  "Computer Engineering grad with 2+ years of production experience across federal agencies and Autocase, a SaaS tool for LEED cost-benefit analysis. I've cut navigation time by 50%, saved officers 80% of their manual work, and caught a 50% data discrepancy between legacy databases before it caused data loss. I work across the full stack: Python, FastAPI, Java, Spring Boot, React, TypeScript, Postgres, and Docker. I use AI tools to move faster without losing sight of the problem.";
+const aboutBlocks = [
+  {
+    label: "Background",
+    text: "Computer Engineering grad with 2+ years of production experience across federal agencies and Autocase, a SaaS platform for LEED cost-benefit analysis. I've cut navigation time by 50%, saved officers 80% of their manual work, and caught a 50% data discrepancy between legacy databases before it caused data loss.",
+  },
+  {
+    label: "Approach",
+    text: "I build the data layer: PostgreSQL schemas, Python and FastAPI services, and the pipelines and reports that turn that data into something people can act on. I use AI tools to move faster without losing sight of the problem.",
+  },
+];
 
 const About: React.FC = () => {
-  const containerRef = useRef<HTMLParagraphElement>(null);
-
-  useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-
-    const ctx = gsap.context(() => {
-      const words = containerRef.current?.querySelectorAll("span");
-      if (!words || words.length === 0) return;
-
-      gsap.fromTo(
-        words,
-        { opacity: 0.15 },
-        {
-          opacity: 1,
-          ease: "none",
-          stagger: 0.04,
-          scrollTrigger: {
-            trigger: containerRef.current,
-            scrub: true,
-            start: "top 80%",
-            end: "bottom 60%",
-          },
-        }
-      );
-    });
-
-    return () => ctx.revert();
-  }, []);
-
   return (
     <section className="section">
       <h2 className="section-title">About</h2>
-      <div className="card about-card">
-        <p className="about-text" ref={containerRef}>
-          {aboutText.split(" ").map((word, i) => (
-            <span key={i} style={{ display: "inline" }}>
-              {word}
-              {" "}
-            </span>
-          ))}
-        </p>
+      <div className="about-text-group">
+        {aboutBlocks.map((block) => (
+          <div key={block.label} className="about-block">
+            <h3 className="eyebrow-label">{block.label}</h3>
+            <motion.p
+              className="about-text"
+              variants={staggerContainer(0.015)}
+              initial="initial"
+              whileInView="enter"
+              viewport={viewportOnce}
+            >
+              {block.text.split(" ").map((word, i) => (
+                <motion.span
+                  key={i}
+                  variants={wordReveal}
+                  className={word.includes("%") ? "about-metric" : undefined}
+                >
+                  {word}
+                  {" "}
+                </motion.span>
+              ))}
+            </motion.p>
+          </div>
+        ))}
       </div>
     </section>
   );

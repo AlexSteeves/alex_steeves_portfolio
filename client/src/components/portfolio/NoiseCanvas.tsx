@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { useTheme } from "../../lib/useTheme";
 
 // ── Vertex shader ── (full-screen triangle)
 const VERT = `
@@ -9,13 +10,16 @@ const VERT = `
 `;
 
 // ── Fragment shader ──
-// Technique: domain-warped FBM with Simplex 3D noise.
-// Two independent fbm samples warp the UV coords before the final
-// colour sample, producing organic flowing shapes that evolve over time.
+// Technique: domain-warped FBM (simplex 3D noise) mapped directly to a
+// mix between the theme's background and foreground color — a single
+// grayscale density field that reads as drifting smoke rather than a
+// colored aurora. uBg/uFg are supplied by React and swap with the theme.
 const FRAG = `
   precision mediump float;
   uniform vec2  uResolution;
   uniform float uTime;
+  uniform vec3  uBg;
+  uniform vec3  uFg;
 
   /* ── Simplex 3D helpers ─────────────────────────────────────────── */
   vec4 permute(vec4 x){ return mod(((x*34.0)+1.0)*x, 289.0); }
@@ -84,43 +88,37 @@ const FRAG = `
     float t  = uTime * 0.07;  // very slow drift
 
     /* Domain warp — two fbm samples displace the UV before the
-       final colour lookup, producing the organic flowing shapes */
+       final density lookup, producing organic drifting smoke shapes */
     vec2 q = vec2(
       fbm(uv + vec2(0.00, 0.00), t),
       fbm(uv + vec2(5.20, 1.30), t)
     );
 
-    /* Main noise at warped coordinates */
-    float n  = fbm(uv * 1.3 + 3.5 * q, t + 0.15);
+    float n = fbm(uv * 1.3 + 3.5 * q, t + 0.15);
 
-    /* Second independent noise for the teal layer */
-    float n2 = fbm(uv * 1.1 + vec2(3.1, 2.4) + 2.5 * q.yx, t + 0.55);
+    /* Smoke density — soften the low end so wisps fade to background
+       instead of a hard edge, keep contrast in the mid-band. Capped
+       below 1.0 so the densest wisps never reach full uFg contrast —
+       keeps foreground text readable underneath in both themes. */
+    float smoke = smoothstep(0.32, 0.82, n) * 0.8;
 
-    /* ── Colour palette (matches portfolio CSS vars) ── */
-    vec3 base   = vec3(0.031, 0.031, 0.031); // #080808
-    vec3 green  = vec3(0.18,  0.48,  0.32);  // deep forest green
-    vec3 amber  = vec3(0.82,  0.63,  0.20);  // warm gold
-    vec3 indigo = vec3(0.27,  0.14,  0.59);  // deep indigo
-    vec3 teal   = vec3(0.08,  0.55,  0.55);  // cool teal
+    vec3 col = mix(uBg, uFg, smoke);
 
-    /* Layer colours — each lives in its own noise band */
-    vec3 col = base;
-    col = mix(col, green,  smoothstep(0.34, 0.58, n)  * 0.52);  // dominant
-    col = mix(col, teal,   smoothstep(0.36, 0.56, n2) * 0.28);  // independent layer
-    col = mix(col, amber,  smoothstep(0.56, 0.72, n)  * 0.32);  // warm accent
-    col = mix(col, indigo, smoothstep(0.64, 0.80, n)  * 0.36);  // deep peaks
-
-    /* Global darkening pass — keep it as atmosphere, not spectacle */
-    col *= 0.72;
-
-    /* Radial vignette — keeps centre brightest, darkens corners */
+    /* Radial vignette — keeps centre clearest, smoke settles toward the edges */
     vec2 vc  = (uv - 0.5) * vec2(1.0, 1.6);
     float vig = pow(clamp(1.0 - dot(vc, vc), 0.0, 1.0), 0.6);
-    col *= mix(0.18, 1.0, vig);
+    col = mix(uBg, col, mix(0.4, 1.0, vig));
 
     gl_FragColor = vec4(col, 1.0);
   }
 `;
+
+// Smoke colors per theme — deliberately not full text-primary brightness,
+// a mid-tone so wisps read as smoke rather than blown-out highlights.
+const SMOKE_COLORS: Record<"dark" | "light", { bg: [number, number, number]; fg: [number, number, number] }> = {
+  dark: { bg: [0.039, 0.039, 0.039], fg: [0.58, 0.58, 0.56] },
+  light: { bg: [0.965, 0.961, 0.949], fg: [0.32, 0.31, 0.29] },
+};
 
 function compileShader(
   gl: WebGLRenderingContext,
@@ -138,6 +136,9 @@ function compileShader(
 
 export default function NoiseCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [theme] = useTheme();
+  const colorsRef = useRef(SMOKE_COLORS[theme]);
+  colorsRef.current = SMOKE_COLORS[theme];
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -174,6 +175,8 @@ export default function NoiseCanvas() {
 
     const uRes = gl.getUniformLocation(prog, "uResolution");
     const uTime = gl.getUniformLocation(prog, "uTime");
+    const uBg = gl.getUniformLocation(prog, "uBg");
+    const uFg = gl.getUniformLocation(prog, "uFg");
 
     let rafId: number;
 
@@ -187,8 +190,11 @@ export default function NoiseCanvas() {
         canvas.height = h;
         gl.viewport(0, 0, w, h);
       }
+      const { bg, fg } = colorsRef.current;
       gl.uniform2f(uRes, w, h);
       gl.uniform1f(uTime, timestamp / 1000);
+      gl.uniform3f(uBg, bg[0], bg[1], bg[2]);
+      gl.uniform3f(uFg, fg[0], fg[1], fg[2]);
       gl.drawArrays(gl.TRIANGLES, 0, 6);
       rafId = requestAnimationFrame(draw);
     };

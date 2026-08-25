@@ -1,36 +1,31 @@
 import type React from "react";
+import { motion } from "framer-motion";
+import { fadeInUp, viewportOnce } from "../../lib/motion";
+import { CONTACT_EMAIL, GITHUB_URL, LINKEDIN_URL } from "../../lib/constants";
 
 const Contact: React.FC = () => {
   return (
     <section className="section">
       <h2 className="section-title">Contact</h2>
-      <div className="card contact-card">
-        <p className="contact-text">
-          "Available for full-stack roles. Hiring or have a problem worth
-          solving? Send an email."
-        </p>
+      <motion.div
+        className="contact-card"
+        variants={fadeInUp}
+        initial="initial"
+        whileInView="enter"
+        viewport={viewportOnce}
+      >
         <div className="contact-links">
-          <a href="mailto:alqusteeves@gmail.com" className="btn btn-primary">
+          <a href={`mailto:${CONTACT_EMAIL}`} className="btn btn-primary">
             Send an Email ↗
           </a>
-          <a
-            href="https://github.com/AlexSteeves"
-            target="_blank"
-            rel="noreferrer"
-            className="btn"
-          >
+          <a href={GITHUB_URL} target="_blank" rel="noreferrer" className="btn">
             GitHub ↗
           </a>
-          <a
-            href="https://linkedin.com/in/alexander-steeves/"
-            target="_blank"
-            rel="noreferrer"
-            className="btn"
-          >
+          <a href={LINKEDIN_URL} target="_blank" rel="noreferrer" className="btn">
             LinkedIn ↗
           </a>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 };

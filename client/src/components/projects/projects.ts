@@ -12,7 +12,7 @@ export const projects: Project[] = [
     description:
       "AI memory layer that syncs Obsidian, Gmail, and Slack into Postgres so Claude starts every session warm.",
     url: "https://github.com/AlexSteeves/engram",
-    tags: ["Python", "Postgres", "Claude AI", "Obsidian", "Slack", "Gmail"],
+    tags: ["Python", "Postgres", "Claude AI", "Obsidian", "Slack"],
     highlights: [
       "Syncs notes, emails, and messages into a single Postgres database Claude can query at session start.",
       "Eliminates context re-setup. Claude surfaces relevant history before the first prompt.",
@@ -24,16 +24,7 @@ export const projects: Project[] = [
     description:
       "Upload a bank statement CSV, get categorized spending and AI insights. Financial data never leaves your machine.",
     url: "https://github.com/AlexSteeves/statement-lens",
-    tags: [
-      "Java",
-      "Spring Boot",
-      "Spring AI",
-      "React",
-      "TypeScript",
-      "Tailwind CSS",
-      "Claude AI",
-      "MCP",
-    ],
+    tags: ["Java", "Spring Boot", "Spring AI", "React", "TypeScript"],
     highlights: [
       "Uploads TD credit card CSV exports and runs agentic AI analysis via MCP servers exposed as callable tools (getSpendingByCategory, getMonthlyTrend).",
       "Shows Claude's step-by-step reasoning as it categorizes transactions. No black-box outputs.",
@@ -46,7 +37,7 @@ export const projects: Project[] = [
     description:
       "Ask plain English questions about any earnings call or 10-K. Answers come with source citations. No digging through 80-page documents.",
     url: "https://github.com/AlexSteeves/EarningsLensAI",
-    tags: ["Python", "FastAPI", "React", "TypeScript", "ChromaDB", "Claude AI"],
+    tags: ["Python", "FastAPI", "React", "TypeScript", "Claude AI"],
     highlights: [
       "Chunks documents into 500-word overlapping segments and embeds them in ChromaDB for semantic retrieval.",
       "Retrieves the top 5 most relevant passages per query and passes them to Claude haiku for grounded, citation-backed answers.",
