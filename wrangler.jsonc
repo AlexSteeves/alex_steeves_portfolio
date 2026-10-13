@@ -9,6 +9,14 @@
 		"not_found_handling": "single-page-application" // Handle SPA routing
 	},
 	"compatibility_flags": ["nodejs_compat"], // Enable node for Vite path features
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "portfolio",
+			"database_id": "22709cd4-29c2-4624-b493-579cd354f028",
+			"migrations_dir": "./server/migrations"
+		}
+	],
 	"dev": {
 		"port": 3000
 	}

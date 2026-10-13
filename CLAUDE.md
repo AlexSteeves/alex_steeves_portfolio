@@ -69,7 +69,12 @@ The client determines the API base URL from `VITE_SERVER_URL`:
 
 Single-file Hono app, prefixed with `/api`.
 
-- `GET /api/stocks/MU` — returns a `PriceHistory` (5 years of daily closes). Data is not fetched at request time: `server/scripts/fetch-prices.ts` downloads it from Yahoo Finance into `server/src/data/<TICKER>.json`, which is bundled with the worker. Refresh with `cd server && bun run fetch-prices MU`; a new ticker also needs its own route in `index.ts`.
+- `GET /api/stocks/:ticker` — returns a `PriceHistory` (5 years of daily closes) from the D1 table `price_history` (one JSON row per ticker).
+- `PUT /api/stocks/:ticker` — replaces that row. Requires `Authorization: Bearer $INGEST_TOKEN`.
+
+The worker never downloads prices itself. The private `server-stock-backend` repo runs on the home server (CT103), downloads from Yahoo Finance once a day and PUTs the result here.
+
+D1: database `portfolio`, binding `DB`, migrations in `server/migrations/`. Apply with `bunx wrangler d1 migrations apply portfolio --remote` (or `--local` for `wrangler dev`, which starts with an empty local database — easiest is to run the client against production data with `VITE_SERVER_URL=https://alexsteeves.dev/api`).
 
 The Senate Watch (Supabase-backed) and Toronto Events (City of Toronto open data) routes were removed along with their frontend features and will be rebuilt when those features return.
 
@@ -79,4 +84,5 @@ The Senate Watch (Supabase-backed) and Toronto Events (City of Toronto open data
 
 ## Environment Variables
 
+- `INGEST_TOKEN` — Worker secret (`wrangler secret put INGEST_TOKEN`; `.dev.vars` locally) that authorises `PUT /api/stocks/:ticker`. The same value lives in `.env` beside the backend's `compose.yaml` on CT103.
 - `VITE_SERVER_URL` — Optional client-side override for the API base URL (defaults based on env).

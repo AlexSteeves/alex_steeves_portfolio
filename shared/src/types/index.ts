@@ -1,4 +1,4 @@
-// Daily price history for one ticker, as served by GET /api/stocks/MU.
+// Daily price history for one ticker, as stored and served by /api/stocks/:ticker.
 export type PricePoint = [date: string, close: number]; // date is YYYY-MM-DD
 
 export type PriceHistory = {

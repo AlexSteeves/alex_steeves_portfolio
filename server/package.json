@@ -11,8 +11,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "dev": "wrangler dev --config ../wrangler.jsonc",
-    "fetch-prices": "bun scripts/fetch-prices.ts"
+    "dev": "wrangler dev --config ../wrangler.jsonc"
   },
   "dependencies": {
     "hono": "^4.10.8",
