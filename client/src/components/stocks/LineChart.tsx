@@ -132,6 +132,8 @@ export default function LineChart({ label, dates, series, domain, refLines, hove
           role="img"
           aria-label={`${label}, ${dates[0]} to ${dates[dates.length - 1]}`}
           tabIndex={0}
+          // Clicking does nothing, so it shouldn't take focus and draw the ring; Tab still does.
+          onMouseDown={(e) => e.preventDefault()}
           onPointerMove={handleMove}
           onPointerLeave={() => onHover(null)}
           onKeyDown={handleKey}
