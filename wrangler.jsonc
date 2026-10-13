@@ -3,6 +3,9 @@
 	"$schema": "./node_modules/wrangler/config-schema.json",
 	"name": "alex-steeves-portfolio", // Name of your project
 	"main": "./server/src/index.ts", // Path to worker
+	// No workers.dev mirror: it serves the same API but bypasses the rate limit
+	// and any other rule set on alexsteeves.dev.
+	"workers_dev": false,
 	"compatibility_date": "2025-05-25",
 	"assets": {
 		"directory": "./client/dist", // Path to client build folder
