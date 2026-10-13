@@ -33,6 +33,11 @@ app.put(
     if (history?.symbol !== symbol || !Array.isArray(history.prices) || !history.prices.length) {
       return c.json({ error: "Invalid price history" }, 400);
     }
+    // Per-day columns must line up with prices, or the client indexes past the end.
+    const columns = [history.open, history.high, history.low, history.volume, history.sma200, history.rsi14];
+    if (columns.some((col) => col !== undefined && (!Array.isArray(col) || col.length !== history.prices.length))) {
+      return c.json({ error: "Column length does not match prices" }, 400);
+    }
     await c.env.DB.prepare(
       `INSERT INTO price_history (symbol, data, updated_at) VALUES (?, ?, datetime('now'))
        ON CONFLICT(symbol) DO UPDATE SET data = excluded.data, updated_at = excluded.updated_at`,

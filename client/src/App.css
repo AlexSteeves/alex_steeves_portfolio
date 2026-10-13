@@ -666,69 +666,243 @@
 }
 
 /* ── Stocks ── */
+/* Every margin, padding and gap on this page is one of these steps: 4px
+   minimum, even values only. Hairlines (1px) are rules, not spacing. */
 .stocks-page {
+  --space-4: 4px;
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-24: 24px;
+  --space-48: 48px;
   font-variant-numeric: tabular-nums;
 }
 
-.stock-header {
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.stock-list {
+  display: grid;
+  gap: var(--space-48);
+}
+
+.stock-footnote {
+  margin-top: var(--space-12);
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* Bento: the 1px gap and padding let the grid's border colour show through
+   as hairlines between flush tiles. */
+.bento {
+  display: grid;
+  gap: 1px;
+  padding: 1px;
+  background: var(--border);
+}
+
+.bento-stock {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-rows: auto repeat(5, 128px);
+  grid-template-areas:
+    "head  head  head  head"
+    "chart chart chart rsi"
+    "chart chart chart sma"
+    "chart chart chart vol"
+    "pane  pane  pane  day"
+    "pane  pane  pane  year";
+}
+
+.tile {
   display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+  min-width: 0;
+  min-height: 0;
+  padding: var(--space-16);
+  background: var(--bg-primary);
+}
+
+.tile-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-4) var(--space-16);
+}
+
+.stock-head {
+  display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: flex-end;
-  flex-wrap: wrap;
-  gap: 1rem;
-  padding-bottom: 1.25rem;
-  margin-bottom: 1.25rem;
-  border-bottom: 1px solid var(--border);
+  gap: var(--space-16);
 }
 
 .stock-name {
-  font-size: 1.25rem;
+  font-size: 20px;
 }
 
 .stock-quote {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  gap: var(--space-4);
 }
 
 .stock-price {
-  font-size: 1.75rem;
+  font-size: 32px;
+  line-height: 1;
 }
 
 .stock-change {
-  font-size: 0.8rem;
+  font-size: 14px;
+}
+
+.stock-change-span {
   color: var(--text-secondary);
 }
 
-.stock-change.negative {
+.stock-change.negative,
+.stat-value.negative {
   color: var(--red-accent);
 }
 
-.stock-footnote {
-  margin-top: 0.75rem;
-  font-size: 0.75rem;
-  color: var(--text-muted);
+.range-tabs {
+  display: flex;
+  gap: var(--space-4);
+  border: 0;
 }
 
-.price-chart {
-  position: relative;
+.range-tab input {
+  position: absolute;
+  opacity: 0;
 }
 
-.price-chart svg {
+.range-tab span {
   display: block;
+  min-width: 40px;
+  padding: var(--space-4) var(--space-8);
+  font-size: 12px;
+  line-height: 24px;
+  text-align: center;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.range-tab span:hover {
+  background: var(--bg-card-hover);
+}
+
+.range-tab input:checked + span {
+  background: var(--text-primary);
+  color: var(--bg-primary);
+}
+
+.range-tab input:focus-visible + span {
+  outline: 2px solid var(--text-primary);
+  outline-offset: 2px;
+}
+
+.stat-value {
+  font-size: 24px;
+  line-height: 1.2;
+}
+
+.stat-note {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4) var(--space-16);
+  list-style: none;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.legend b {
+  margin-left: var(--space-4);
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.legend-key {
+  display: inline-block;
+  width: 16px;
+  margin-right: var(--space-8);
+  vertical-align: middle;
+  border-top: 2px solid var(--text-primary);
+}
+
+.legend-key.secondary {
+  border-top: 2px dashed var(--text-secondary);
+}
+
+.range-bar {
+  position: relative;
+  height: 16px;
+}
+
+.range-bar::before {
+  content: "";
+  position: absolute;
+  inset: 7px 0;
+  background: var(--border-hover);
+}
+
+.range-bar-tick {
+  position: absolute;
+  top: 0;
+  width: 2px;
+  height: 100%;
+  background: var(--text-primary);
+  transform: translateX(-50%);
+}
+
+.range-bar-ends {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+/* The svg is taken out of flow so its size never feeds back into the tile's. */
+.line-chart {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+
+.line-chart svg {
+  position: absolute;
+  inset: 0;
   touch-action: pan-y;
 }
 
-.price-chart-grid {
+.line-chart svg:focus-visible {
+  outline: 2px solid var(--text-primary);
+  outline-offset: 2px;
+}
+
+.line-chart-grid {
   stroke: var(--border);
 }
 
-.price-chart-label {
+.line-chart-label {
   fill: var(--text-muted);
-  font-size: 0.7rem;
+  font-size: 12px;
 }
 
-.price-chart-line {
+.line-chart-line {
   fill: none;
   stroke: var(--text-primary);
   stroke-width: 2;
@@ -736,35 +910,43 @@
   stroke-linecap: round;
 }
 
-.price-chart-crosshair {
+.line-chart-line.secondary {
+  stroke: var(--text-secondary);
+  stroke-dasharray: 4 4;
+  stroke-linecap: butt;
+}
+
+.line-chart-crosshair {
   stroke: var(--border-hover);
 }
 
-.price-chart-dot {
+.line-chart-dot {
   fill: var(--text-primary);
   stroke: var(--bg-primary);
   stroke-width: 2;
 }
 
-.price-chart-tooltip {
-  position: absolute;
-  top: 0.75rem;
-  display: flex;
-  flex-direction: column;
-  padding: 0.4rem 0.6rem;
-  background: var(--bg-card);
-  border: 1px solid var(--border-hover);
-  pointer-events: none;
-  white-space: nowrap;
-}
+@media (max-width: 768px) {
+  .bento-stock {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: auto 320px auto 224px auto auto;
+    grid-template-areas:
+      "head  head"
+      "chart chart"
+      "rsi   sma"
+      "pane  pane"
+      "vol   day"
+      "year  year";
+  }
 
-.price-chart-tooltip-value {
-  font-size: 0.9rem;
-}
+  .range-tab {
+    flex: 1 1 0;
+  }
 
-.price-chart-tooltip-date {
-  font-size: 0.7rem;
-  color: var(--text-secondary);
+  .range-tab span {
+    min-width: 0;
+    padding: var(--space-4);
+  }
 }
 
 /* ── Small phones (≤600px) ── */
