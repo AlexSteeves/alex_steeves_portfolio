@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { bearerAuth } from "hono/bearer-auth";
 import { bodyLimit } from "hono/body-limit";
-import type { PriceHistory } from "shared";
+import { parsePriceHistory } from "./validate";
 
 type Bindings = {
   DB: D1Database;
@@ -13,8 +13,19 @@ const app = new Hono<{ Bindings: Bindings }>().basePath("/api");
 
 app.use(cors());
 
+const TICKER = /^[A-Z0-9.-]{1,10}$/;
+
+// Prices change once a day, so browsers may reuse a read for an hour. This
+// spares honest visitors repeat fetches; it does not stop deliberate hammering,
+// which needs a Cloudflare rate-limit rule. The wildcard also matches /stocks.
+app.get("/stocks/*", async (c, next) => {
+  await next();
+  if (c.res.ok) c.res.headers.set("Cache-Control", "public, max-age=3600");
+});
+
 // Price history is downloaded on the home server and pushed here once a day
 // (server-stock-backend repo). The worker only stores and serves it.
+
 // Every ticker that has been pushed, so the client needs no hardcoded list.
 app.get("/stocks", async (c) => {
   const { results } = await c.env.DB.prepare("SELECT symbol FROM price_history ORDER BY symbol").all<{ symbol: string }>();
@@ -35,15 +46,9 @@ app.put(
   (c, next) => bearerAuth({ token: c.env.INGEST_TOKEN })(c, next),
   async (c) => {
     const symbol = c.req.param("ticker").toUpperCase();
-    const history = await c.req.json<PriceHistory>().catch(() => null);
-    if (history?.symbol !== symbol || !Array.isArray(history.prices) || !history.prices.length) {
-      return c.json({ error: "Invalid price history" }, 400);
-    }
-    // Per-day columns must line up with prices, or the client indexes past the end.
-    const columns = [history.open, history.high, history.low, history.volume, history.sma200, history.rsi14];
-    if (columns.some((col) => col !== undefined && (!Array.isArray(col) || col.length !== history.prices.length))) {
-      return c.json({ error: "Column length does not match prices" }, 400);
-    }
+    if (!TICKER.test(symbol)) return c.json({ error: "Invalid ticker" }, 400);
+    const history = parsePriceHistory(symbol, await c.req.json().catch(() => null));
+    if (typeof history === "string") return c.json({ error: history }, 400);
     await c.env.DB.prepare(
       `INSERT INTO price_history (symbol, data, updated_at) VALUES (?, ?, datetime('now'))
        ON CONFLICT(symbol) DO UPDATE SET data = excluded.data, updated_at = excluded.updated_at`,

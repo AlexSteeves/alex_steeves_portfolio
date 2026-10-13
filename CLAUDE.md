@@ -72,8 +72,8 @@ The client determines the API base URL from `VITE_SERVER_URL`:
 Single-file Hono app, prefixed with `/api`.
 
 - `GET /api/stocks/:ticker` — returns a `PriceHistory` (5 years of daily closes, plus optional per-day `open`/`high`/`low`/`volume`/`sma200`/`rsi14` columns aligned to `prices`) from the D1 table `price_history` (one JSON row per ticker). Indicators are computed by the backend, never in the client or worker.
-- `GET /api/stocks` — sorted list of every ticker in `price_history`.
-- `PUT /api/stocks/:ticker` — replaces that row. Requires `Authorization: Bearer $INGEST_TOKEN`.
+- `GET /api/stocks` — sorted list of every ticker in `price_history`. Successful reads carry `Cache-Control: public, max-age=3600` (browser caching only). Tests: `bun test` in `server/`.
+- `PUT /api/stocks/:ticker` — replaces that row. Requires `Authorization: Bearer $INGEST_TOKEN`. The body is checked by `parsePriceHistory` in `server/src/validate.ts`, which also drops any field it does not know, so a new field from the backend must be added there (and to `PriceHistory`) or it is silently discarded.
 
 The worker never downloads prices itself. The private `server-stock-backend` repo runs on the home server (CT103), downloads every ticker in its `tickers.txt` from Yahoo Finance once a day and PUTs each result here.
 
