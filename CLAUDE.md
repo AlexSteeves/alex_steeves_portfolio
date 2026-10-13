@@ -43,12 +43,12 @@ Build orchestration is handled by **Turbo**. Deployment targets **Cloudflare Wor
 - `pages/` — Route-level page components:
   - `Portfolio.tsx` (`/`) — composes the portfolio home page from `components/portfolio/`
   - `ProjectsPage.tsx` (`/projects`) — full project list, lazy-loaded
-  - `Stocks.tsx` (`/stocks`) — one `StockPanel` per entry in `TICKERS`, each fetched from `/api/stocks/:ticker`, lazy-loaded
+  - `Stocks.tsx` (`/stocks`) — ticker tabs from `GET /api/stocks`, one `StockPanel` for the selected ticker fetched from `/api/stocks/:ticker`, lazy-loaded. No ticker list in the client: a stock appears once the backend has pushed it
 - `components/` — grouped by feature:
   - `portfolio/` — Hero, About, Experience, Skills, ProjectsSection, Contact, NoiseCanvas, TimelineDivider (shared shape-cycling divider between Experience/Projects entries)
   - `nav/` — NavBar, ThemeToggle
   - `projects/` — ProjectCard, shared project data
-  - `stocks/` — reusable stock components, all hand-rolled (no chart library). `StockPanel` takes a `PriceHistory` and composes the rest: `Bento`/`Tile`/`StatTile`/`RangeTile` (hairline bento grid; layouts are `grid-template-areas` under `.bento-<layout>` in `App.css`, a tile picks its `area`), `RangeTabs` (native radio group), `LineChart` (SVG, parent-controlled crosshair so the price and RSI charts scrub together). Range slicing and formatters live in `lib/stocks.ts` (`bun test` in `client/`).
+  - `stocks/` — reusable stock components, all hand-rolled (no chart library). `StockPanel` takes a `PriceHistory` and composes the rest: `Bento`/`Tile`/`StatTile`/`RangeTile` (hairline bento grid; layouts are `grid-template-areas` under `.bento-<layout>` in `App.css`, a tile picks its `area`), `Tabs` (native radio group, used for both tickers and time ranges), `LineChart` (SVG, parent-controlled crosshair so the price and RSI charts scrub together). Range slicing and formatters live in `lib/stocks.ts` (`bun test` in `client/`).
   - Stocks spacing: only the `--space-*` tokens on `.stocks-page` (4px minimum, even values). The 1px bento gap is a hairline, not spacing.
   - `ThemeProvider.tsx` — theme state (localStorage-backed, `data-theme` attribute on `<html>`)
 - `lib/motion.ts` — shared framer-motion variants (`slideMask`, `fadeInUp`, `staggerContainer`, `wordReveal`, `viewportOnce`); reuse these instead of declaring new ad hoc variants
@@ -72,9 +72,10 @@ The client determines the API base URL from `VITE_SERVER_URL`:
 Single-file Hono app, prefixed with `/api`.
 
 - `GET /api/stocks/:ticker` — returns a `PriceHistory` (5 years of daily closes, plus optional per-day `open`/`high`/`low`/`volume`/`sma200`/`rsi14` columns aligned to `prices`) from the D1 table `price_history` (one JSON row per ticker). Indicators are computed by the backend, never in the client or worker.
+- `GET /api/stocks` — sorted list of every ticker in `price_history`.
 - `PUT /api/stocks/:ticker` — replaces that row. Requires `Authorization: Bearer $INGEST_TOKEN`.
 
-The worker never downloads prices itself. The private `server-stock-backend` repo runs on the home server (CT103), downloads from Yahoo Finance once a day and PUTs the result here.
+The worker never downloads prices itself. The private `server-stock-backend` repo runs on the home server (CT103), downloads every ticker in its `tickers.txt` from Yahoo Finance once a day and PUTs each result here.
 
 D1: database `portfolio`, binding `DB`, migrations in `server/migrations/`. Apply with `bunx wrangler d1 migrations apply portfolio --remote` (or `--local` for `wrangler dev`, which starts with an empty local database — easiest is to run the client against production data with `VITE_SERVER_URL=https://alexsteeves.dev/api`).
 

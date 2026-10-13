@@ -15,6 +15,12 @@ app.use(cors());
 
 // Price history is downloaded on the home server and pushed here once a day
 // (server-stock-backend repo). The worker only stores and serves it.
+// Every ticker that has been pushed, so the client needs no hardcoded list.
+app.get("/stocks", async (c) => {
+  const { results } = await c.env.DB.prepare("SELECT symbol FROM price_history ORDER BY symbol").all<{ symbol: string }>();
+  return c.json(results.map((row) => row.symbol));
+});
+
 app.get("/stocks/:ticker", async (c) => {
   const row = await c.env.DB.prepare("SELECT data FROM price_history WHERE symbol = ?")
     .bind(c.req.param("ticker").toUpperCase())

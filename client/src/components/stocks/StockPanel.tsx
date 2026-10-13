@@ -3,10 +3,10 @@
 import type React from "react";
 import { useMemo, useState } from "react";
 import type { PriceHistory } from "shared";
-import { formatCompact, formatDay, formatPercent, rangeStart, type Range } from "../../lib/stocks";
+import { formatCompact, formatDay, formatPercent, RANGES, rangeStart, type Range } from "../../lib/stocks";
 import { Bento, RangeTile, StatTile, Tile } from "./Bento";
 import LineChart from "./LineChart";
-import RangeTabs from "./RangeTabs";
+import Tabs from "./Tabs";
 
 const YEAR = 252; // trading days
 const NONE = "—";
@@ -62,8 +62,11 @@ export default function StockPanel({ data }: { data: PriceHistory }): React.Reac
             </span>
           </div>
         </div>
-        <RangeTabs
+        <Tabs
           name={`range-${data.symbol}`}
+          legend="Time range"
+          options={RANGES}
+          fit
           value={range}
           onChange={(next) => {
             setRange(next);

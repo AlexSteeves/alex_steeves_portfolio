@@ -689,7 +689,7 @@
 
 .stock-list {
   display: grid;
-  gap: var(--space-48);
+  gap: var(--space-16);
 }
 
 .stock-footnote {
@@ -774,18 +774,19 @@
   color: var(--red-accent);
 }
 
-.range-tabs {
+.tabs {
   display: flex;
+  flex-wrap: wrap;
   gap: var(--space-4);
   border: 0;
 }
 
-.range-tab input {
+.tab input {
   position: absolute;
   opacity: 0;
 }
 
-.range-tab span {
+.tab span {
   display: block;
   min-width: 40px;
   padding: var(--space-4) var(--space-8);
@@ -796,16 +797,16 @@
   cursor: pointer;
 }
 
-.range-tab span:hover {
+.tab span:hover {
   background: var(--bg-card-hover);
 }
 
-.range-tab input:checked + span {
+.tab input:checked + span {
   background: var(--text-primary);
   color: var(--bg-primary);
 }
 
-.range-tab input:focus-visible + span {
+.tab input:focus-visible + span {
   outline: 2px solid var(--text-primary);
   outline-offset: 2px;
 }
@@ -939,11 +940,15 @@
       "year  year";
   }
 
-  .range-tab {
+  .tabs-fit {
+    flex-wrap: nowrap;
+  }
+
+  .tabs-fit .tab {
     flex: 1 1 0;
   }
 
-  .range-tab span {
+  .tabs-fit .tab span {
     min-width: 0;
     padding: var(--space-4);
   }
