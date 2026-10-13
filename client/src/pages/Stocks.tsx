@@ -1,8 +1,8 @@
 import type React from "react";
 import { useEffect, useState } from "react";
 import type { PriceHistory } from "shared";
+import Combobox from "../components/stocks/Combobox";
 import StockPanel from "../components/stocks/StockPanel";
-import Tabs from "../components/stocks/Tabs";
 import { API_URL } from "../lib/constants";
 
 async function getJson<T>(path: string): Promise<T> {
@@ -56,7 +56,7 @@ export default function Stocks(): React.ReactElement {
       {error && <p className="page-subtitle">Couldn't load the stock list: {error}</p>}
       {ticker && (
         <div className="stock-list">
-          <Tabs name="ticker" legend="Stock" options={tickers} value={ticker} onChange={setTicker} />
+          <Combobox label="Stock" options={tickers} value={ticker} onChange={setTicker} />
           {/* key remounts the panel so range and loading state reset per stock */}
           <Stock key={ticker} ticker={ticker} />
         </div>

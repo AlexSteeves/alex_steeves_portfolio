@@ -73,6 +73,7 @@ body {
 
 
 #root {
+  isolation: isolate; /* keeps Base UI popups, portalled to <body>, above the app */
   min-height: 100vh;
   display: flex;
   flex-direction: column;

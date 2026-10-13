@@ -667,8 +667,10 @@
 
 /* ── Stocks ── */
 /* Every margin, padding and gap on this page is one of these steps: 4px
-   minimum, even values only. Hairlines (1px) are rules, not spacing. */
-.stocks-page {
+   minimum, even values only. Hairlines (1px) are rules, not spacing.
+   The combobox popup renders outside the page, so it needs them too. */
+.stocks-page,
+.combobox-positioner {
   --space-4: 4px;
   --space-8: 8px;
   --space-12: 12px;
@@ -809,6 +811,125 @@
 .tab input:focus-visible + span {
   outline: 2px solid var(--text-primary);
   outline-offset: 2px;
+}
+
+.combobox {
+  position: relative;
+  width: 200px;
+  max-width: 100%;
+}
+
+.combobox input {
+  width: 100%;
+  padding: var(--space-8) var(--space-48) var(--space-8) var(--space-12);
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  transition: border-color 120ms;
+}
+
+.combobox input::placeholder {
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.combobox input:hover {
+  border-color: var(--border-hover);
+}
+
+.combobox input:focus-visible {
+  outline: 2px solid var(--text-primary);
+  outline-offset: 2px;
+}
+
+.combobox-trigger {
+  position: absolute;
+  inset: 0 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  border: 0;
+  background: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.combobox-trigger:hover {
+  color: var(--text-primary);
+}
+
+.combobox-trigger svg {
+  transition: transform 120ms;
+}
+
+.combobox-trigger[data-popup-open] svg {
+  transform: rotate(180deg);
+}
+
+/* The popup is portalled to <body>, so it sits above the page content but
+   below the nav. */
+.combobox-positioner {
+  z-index: 10;
+}
+
+.combobox-popup {
+  width: var(--anchor-width);
+  max-height: min(280px, var(--available-height));
+  overflow-y: auto;
+  padding: var(--space-4);
+  border: 1px solid var(--border-hover);
+  background: var(--bg-card);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  transform-origin: var(--transform-origin);
+  transition:
+    opacity 120ms,
+    transform 120ms;
+}
+
+.combobox-popup[data-starting-style],
+.combobox-popup[data-ending-style] {
+  opacity: 0;
+  transform: translateY(-4px);
+}
+
+.combobox-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4) var(--space-8);
+  font-size: 14px;
+  line-height: 24px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  user-select: none;
+}
+
+.combobox-item[data-highlighted] {
+  background: var(--bg-card-hover);
+  color: var(--text-primary);
+}
+
+.combobox-item[data-selected] {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* Base UI keeps this mounted and empty while there are matches. */
+.combobox-empty:not(:empty) {
+  padding: var(--space-4) var(--space-8);
+  font-size: 14px;
+  line-height: 24px;
+  color: var(--text-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .combobox-popup,
+  .combobox-trigger svg {
+    transition: none;
+  }
 }
 
 .stat-value {
