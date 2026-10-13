@@ -11,10 +11,12 @@
   },
   "scripts": {
     "build": "tsc",
-    "dev": "wrangler dev --config ../wrangler.jsonc"
+    "dev": "wrangler dev --config ../wrangler.jsonc",
+    "fetch-prices": "bun scripts/fetch-prices.ts"
   },
   "dependencies": {
-    "hono": "^4.10.8"
+    "hono": "^4.10.8",
+    "shared": "workspace:*"
   },
   "devDependencies": {
     "@types/bun": "latest"

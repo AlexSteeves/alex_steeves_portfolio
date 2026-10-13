@@ -19,6 +19,7 @@
 
     // Module resolution
     "moduleResolution": "bundler",
+    "resolveJsonModule": true,
     "allowImportingTsExtensions": false
   },
   "include": ["src/**/*"],

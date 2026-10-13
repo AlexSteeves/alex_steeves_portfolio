@@ -665,6 +665,108 @@
   flex-wrap: wrap;
 }
 
+/* ── Stocks ── */
+.stocks-page {
+  font-variant-numeric: tabular-nums;
+}
+
+.stock-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding-bottom: 1.25rem;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.stock-name {
+  font-size: 1.25rem;
+}
+
+.stock-quote {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.stock-price {
+  font-size: 1.75rem;
+}
+
+.stock-change {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.stock-change.negative {
+  color: var(--red-accent);
+}
+
+.stock-footnote {
+  margin-top: 0.75rem;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.price-chart {
+  position: relative;
+}
+
+.price-chart svg {
+  display: block;
+  touch-action: pan-y;
+}
+
+.price-chart-grid {
+  stroke: var(--border);
+}
+
+.price-chart-label {
+  fill: var(--text-muted);
+  font-size: 0.7rem;
+}
+
+.price-chart-line {
+  fill: none;
+  stroke: var(--text-primary);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.price-chart-crosshair {
+  stroke: var(--border-hover);
+}
+
+.price-chart-dot {
+  fill: var(--text-primary);
+  stroke: var(--bg-primary);
+  stroke-width: 2;
+}
+
+.price-chart-tooltip {
+  position: absolute;
+  top: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  padding: 0.4rem 0.6rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-hover);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.price-chart-tooltip-value {
+  font-size: 0.9rem;
+}
+
+.price-chart-tooltip-date {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+}
+
 /* ── Small phones (≤600px) ── */
 @media (max-width: 600px) {
   .navbar {
@@ -745,6 +847,10 @@
   }
 
   .experience-meta {
+    align-items: flex-start;
+  }
+
+  .stock-quote {
     align-items: flex-start;
   }
 

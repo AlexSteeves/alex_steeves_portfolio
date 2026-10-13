@@ -43,6 +43,7 @@ Build orchestration is handled by **Turbo**. Deployment targets **Cloudflare Wor
 - `pages/` — Route-level page components:
   - `Portfolio.tsx` (`/`) — composes the portfolio home page from `components/portfolio/`
   - `ProjectsPage.tsx` (`/projects`) — full project list, lazy-loaded
+  - `Stocks.tsx` (`/stocks`) — MU price chart from `/api/stocks/MU`, lazy-loaded; chart is hand-rolled SVG in `components/stocks/PriceChart.tsx` (no chart library)
 - `components/` — grouped by feature:
   - `portfolio/` — Hero, About, Experience, Skills, ProjectsSection, Contact, NoiseCanvas, TimelineDivider (shared shape-cycling divider between Experience/Projects entries)
   - `nav/` — NavBar, ThemeToggle
@@ -66,11 +67,15 @@ The client determines the API base URL from `VITE_SERVER_URL`:
 
 ### Backend (`server/src/index.ts`)
 
-Single-file Hono app, prefixed with `/api`. Currently just a CORS-enabled skeleton with no routes — the Senate Watch (Supabase-backed) and Toronto Events (City of Toronto open data) routes were removed along with their frontend features and will be rebuilt when those features return.
+Single-file Hono app, prefixed with `/api`.
+
+- `GET /api/stocks/MU` — returns a `PriceHistory` (5 years of daily closes). Data is not fetched at request time: `server/scripts/fetch-prices.ts` downloads it from Yahoo Finance into `server/src/data/<TICKER>.json`, which is bundled with the worker. Refresh with `cd server && bun run fetch-prices MU`; a new ticker also needs its own route in `index.ts`.
+
+The Senate Watch (Supabase-backed) and Toronto Events (City of Toronto open data) routes were removed along with their frontend features and will be rebuilt when those features return.
 
 ### Shared Types & Constants (`shared/src/`)
 
-Currently empty (`export {}`) — types and constants lived here for the now-removed Senate Watch/Toronto Events features. Add new shared types/constants here when client and server need to agree on a shape.
+`types/index.ts` holds `PriceHistory` / `PricePoint` for the stocks route. Add new shared types/constants here when client and server need to agree on a shape.
 
 ## Environment Variables
 

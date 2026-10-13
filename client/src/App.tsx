@@ -9,6 +9,7 @@ import ThemeProvider from "./components/ThemeProvider";
 import "./App.css";
 
 const ProjectsPage = lazy(() => import("./pages/ProjectsPage"));
+const Stocks = lazy(() => import("./pages/Stocks"));
 
 function App(): React.ReactElement {
   return (
@@ -21,6 +22,7 @@ function App(): React.ReactElement {
               <Routes>
                 <Route path="/" element={<Portfolio />} />
                 <Route path="/projects" element={<ProjectsPage />} />
+                <Route path="/stocks" element={<Stocks />} />
               </Routes>
             </Suspense>
           </SmoothScroll>

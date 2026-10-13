@@ -1,11 +1,16 @@
-// Sticky top navigation with a burger dropdown for secondary links.
-// On desktop the dropdown holds Projects.
-// On mobile all links collapse into the dropdown.
+// Sticky top navigation. On desktop the links sit inline;
+// on mobile they collapse into the burger dropdown.
 import type React from "react";
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import ThemeToggle from "./ThemeToggle";
+
+const links = [
+  { to: "/", label: "Portfolio" },
+  { to: "/projects", label: "Projects" },
+  { to: "/stocks", label: "Stocks" },
+];
 
 function NavBar(): React.ReactElement {
   const [open, setOpen] = useState(false);
@@ -19,19 +24,16 @@ function NavBar(): React.ReactElement {
       </NavLink>
 
       <div className="nav-links">
-        <NavLink
-          to="/"
-          end
-          className={({ isActive }) => `nav-link${isActive ? " active" : ""}`}
-        >
-          Portfolio
-        </NavLink>
-        <NavLink
-          to="/projects"
-          className={({ isActive }) => `nav-link${isActive ? " active" : ""}`}
-        >
-          Projects
-        </NavLink>
+        {links.map(({ to, label }) => (
+          <NavLink
+            key={to}
+            to={to}
+            end
+            className={({ isActive }) => `nav-link${isActive ? " active" : ""}`}
+          >
+            {label}
+          </NavLink>
+        ))}
 
         <ThemeToggle />
 
@@ -62,25 +64,19 @@ function NavBar(): React.ReactElement {
                   exit={{ opacity: 0, y: -8 }}
                   transition={{ duration: 0.2 }}
                 >
-                  <NavLink
-                    to="/"
-                    end
-                    className={({ isActive }) =>
-                      `burger-link mobile-only${isActive ? " active" : ""}`
-                    }
-                    onClick={close}
-                  >
-                    Portfolio
-                  </NavLink>
-                  <NavLink
-                    to="/projects"
-                    className={({ isActive }) =>
-                      `burger-link mobile-only${isActive ? " active" : ""}`
-                    }
-                    onClick={close}
-                  >
-                    Projects
-                  </NavLink>
+                  {links.map(({ to, label }) => (
+                    <NavLink
+                      key={to}
+                      to={to}
+                      end
+                      className={({ isActive }) =>
+                        `burger-link mobile-only${isActive ? " active" : ""}`
+                      }
+                      onClick={close}
+                    >
+                      {label}
+                    </NavLink>
+                  ))}
                 </motion.div>
               </>
             )}
