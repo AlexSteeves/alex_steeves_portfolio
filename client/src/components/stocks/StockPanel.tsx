@@ -2,7 +2,7 @@
 // quote, range picker, price + SMA chart, RSI pane and the stat tiles.
 import type React from "react";
 import { useMemo, useState } from "react";
-import type { PriceHistory } from "shared";
+import type { Cycle, PriceHistory } from "shared";
 import { formatCompact, formatDay, formatPercent, RANGES, rangeStart, type Range } from "../../lib/stocks";
 import { Bento, RangeTile, StatTile, Tile } from "./Bento";
 import LineChart from "./LineChart";
@@ -13,6 +13,54 @@ const NONE = "—";
 
 function rsiNote(rsi: number): string {
   return rsi >= 70 ? "Overbought, 70 or above" : rsi <= 30 ? "Oversold, 30 or below" : "Neutral, 30 to 70";
+}
+
+const percent = (fraction: number) => `${(fraction * 100).toFixed(1)}%`;
+const list = (values: (number | null)[], format: (v: number) => string) =>
+  values.map((v) => (v === null ? "loss" : format(v))).join(", ");
+
+// Fundamentals for a cyclical stock, each set against its past margin peaks:
+// a low multiple on record margins is the late-cycle pattern, not a bargain.
+export function CycleTiles({ cycle }: { cycle: Cycle }): React.ReactElement {
+  const { peaks } = cycle;
+  const atPeaks = (values: (number | null)[], format: (v: number) => string) =>
+    peaks.length ? `At past peaks ${list(values, format)}` : undefined;
+  const fixed = (v: number) => v.toFixed(1);
+  return (
+    <Bento layout="cycle">
+      <StatTile
+        area="margin"
+        title="Gross margin"
+        value={percent(cycle.grossMargin)}
+        note={atPeaks(peaks.map((p) => p.grossMargin), percent)}
+      />
+      <StatTile
+        area="stock"
+        title="Inventory days"
+        value={cycle.inventoryDays === null ? NONE : cycle.inventoryDays.toFixed(0)}
+        note={cycle.priorInventoryDays === null ? undefined : `${cycle.priorInventoryDays.toFixed(0)} a quarter earlier`}
+      />
+      <StatTile
+        area="pe"
+        title="P/E, trailing"
+        value={cycle.pe === null ? NONE : fixed(cycle.pe)}
+        note={atPeaks(peaks.map((p) => p.pe), fixed)}
+      />
+      <StatTile
+        area="ev"
+        title="EV/EBITDA, trailing"
+        value={cycle.evEbitda === null ? NONE : fixed(cycle.evEbitda)}
+        note={atPeaks(peaks.map((p) => p.evEbitda), fixed)}
+      />
+      <StatTile
+        area="capex"
+        title="Buyer capex"
+        value={cycle.capexGrowth === null ? NONE : formatPercent(cycle.capexGrowth)}
+        note={cycle.capexQuarter ? `${cycle.buyers.join(" ")}, ${cycle.capexQuarter} on a year earlier` : undefined}
+        negative={cycle.capexGrowth !== null && cycle.capexGrowth < 0}
+      />
+    </Bento>
+  );
 }
 
 export default function StockPanel({ data }: { data: PriceHistory }): React.ReactElement {

@@ -2,7 +2,7 @@ import type React from "react";
 import { useEffect, useState } from "react";
 import type { PriceHistory } from "shared";
 import Combobox from "../components/stocks/Combobox";
-import StockPanel from "../components/stocks/StockPanel";
+import StockPanel, { CycleTiles } from "../components/stocks/StockPanel";
 import { API_URL } from "../lib/constants";
 
 async function getJson<T>(path: string): Promise<T> {
@@ -26,8 +26,10 @@ function Stock({ ticker }: { ticker: string }): React.ReactElement | null {
   return (
     <section>
       <StockPanel data={history} />
+      {history.cycle && <CycleTiles cycle={history.cycle} />}
       <p className="stock-footnote">
         Last close {history.prices[history.prices.length - 1]?.[0]}. Source: Yahoo Finance.
+        {history.cycle && ` Fundamentals to the quarter ended ${history.cycle.quarterEnd}, from SEC filings.`}
       </p>
     </section>
   );

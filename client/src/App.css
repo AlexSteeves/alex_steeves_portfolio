@@ -721,6 +721,14 @@
     "pane  pane  pane  year";
 }
 
+/* Sits flush under the stock grid, sharing its bottom hairline. */
+.bento-cycle {
+  margin-top: -1px;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-rows: 128px;
+  grid-template-areas: "margin stock pe ev capex";
+}
+
 .tile {
   display: flex;
   flex-direction: column;
@@ -1059,6 +1067,15 @@
       "pane  pane"
       "vol   day"
       "year  year";
+  }
+
+  .bento-cycle {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: auto;
+    grid-template-areas:
+      "margin stock"
+      "pe     ev"
+      "capex  capex";
   }
 
   .tabs-fit {

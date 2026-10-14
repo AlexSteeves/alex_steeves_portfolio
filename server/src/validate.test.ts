@@ -21,6 +21,30 @@ test("accepts the fetcher's shape and the older closes-only shape", () => {
   expect(parsePriceHistory("MU", { symbol, name, currency, prices })).toEqual({ symbol, name, currency, prices });
 });
 
+const cycle = {
+  quarterEnd: "2026-09-03",
+  grossMargin: 0.868,
+  inventoryDays: 142,
+  priorInventoryDays: 122,
+  pe: 12.8,
+  evEbitda: null,
+  peaks: [{ end: "2018-08-30", grossMargin: 0.61, pe: 4.6, evEbitda: 3.2 }],
+  buyers: ["MSFT", "ORCL"],
+  capexQuarter: "2026Q2",
+  capexGrowth: 0.865,
+};
+
+test("accepts a cycle summary, strips its unknown fields, rejects a malformed one", () => {
+  expect(parsePriceHistory("MU", { ...good, cycle })).toEqual({ ...good, cycle });
+  const extra = { ...cycle, note: "<script>", peaks: [{ ...cycle.peaks[0], note: "x" }] };
+  expect(parsePriceHistory("MU", { ...good, cycle: extra })).toEqual({ ...good, cycle });
+  expect(bad({ cycle: { ...cycle, grossMargin: "87%" } })).toBe("Invalid cycle");
+  expect(bad({ cycle: { ...cycle, peaks: [{ end: "2018", grossMargin: 0.61, pe: 4.6, evEbitda: 3.2 }] } })).toBe("Invalid cycle");
+  expect(bad({ cycle: { ...cycle, buyers: ["<b>"] } })).toBe("Invalid cycle");
+  expect(bad({ cycle: { ...cycle, capexQuarter: "soon" } })).toBe("Invalid cycle");
+  expect(bad({ cycle: "high" })).toBe("Invalid cycle");
+});
+
 test("drops fields it does not know", () => {
   expect(parsePriceHistory("MU", { ...good, extra: "<script>" })).toEqual(good);
 });
