@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { bearerAuth } from "hono/bearer-auth";
 import { bodyLimit } from "hono/body-limit";
+import type { StockListing } from "shared";
 import { parsePriceHistory } from "./validate";
 
 type Bindings = {
@@ -26,10 +27,13 @@ app.get("/stocks/*", async (c, next) => {
 // Price history is downloaded on the home server and pushed here once a day
 // (server-stock-backend repo). The worker only stores and serves it.
 
-// Every ticker that has been pushed, so the client needs no hardcoded list.
+// Every ticker that has been pushed, with its company name for the picker's
+// search, so the client needs no hardcoded list.
 app.get("/stocks", async (c) => {
-  const { results } = await c.env.DB.prepare("SELECT symbol FROM price_history ORDER BY symbol").all<{ symbol: string }>();
-  return c.json(results.map((row) => row.symbol));
+  const { results } = await c.env.DB.prepare(
+    "SELECT symbol, json_extract(data, '$.name') AS name FROM price_history ORDER BY symbol",
+  ).all<StockListing>();
+  return c.json(results);
 });
 
 app.get("/stocks/:ticker", async (c) => {

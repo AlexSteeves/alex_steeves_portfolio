@@ -10,7 +10,9 @@ function fakeEnv() {
       const statement = {
         bind: (...values: string[]) => ((args = values), statement),
         first: async () => (rows.has(args[0]!) ? { data: rows.get(args[0]!) } : null),
-        all: async () => ({ results: [...rows.keys()].sort().map((symbol) => ({ symbol })) }),
+        all: async () => ({
+          results: [...rows.keys()].sort().map((symbol) => ({ symbol, name: JSON.parse(rows.get(symbol)!).name })),
+        }),
         run: async () => (sql.startsWith("INSERT") ? rows.set(args[0]!, args[1]!) : undefined),
       };
       return statement;
@@ -39,7 +41,7 @@ test("a valid upload is stored, listed and served with a cache header", async ()
   expect((await put(env, "mu", { ...body, junk: 1 })).status).toBe(200);
 
   const list = await app.request("/api/stocks", {}, env);
-  expect(await list.json()).toEqual(["MU"]);
+  expect(await list.json()).toEqual([{ symbol: "MU", name: "Micron" }]);
   expect(list.headers.get("Cache-Control")).toBe("public, max-age=3600");
 
   const one = await app.request("/api/stocks/MU", {}, env);
@@ -60,5 +62,5 @@ test("bad uploads are rejected and store nothing", async () => {
   expect((await put(env, "AAPL", body)).status).toBe(400); // symbol mismatch
   expect((await put(env, "WAY-TOO-LONG-TICKER", { ...body, symbol: "WAY-TOO-LONG-TICKER" })).status).toBe(400);
   expect((await put(env, "BRK.B", { ...body, symbol: "BRK.B" })).status).toBe(200); // dots are real tickers
-  expect(await (await app.request("/api/stocks", {}, env)).json()).toEqual(["BRK.B"]);
+  expect(await (await app.request("/api/stocks", {}, env)).json()).toEqual([{ symbol: "BRK.B", name: "Micron" }]);
 });

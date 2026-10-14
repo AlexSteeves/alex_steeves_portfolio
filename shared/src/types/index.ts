@@ -17,6 +17,9 @@ export type PriceHistory = {
   cycle?: Cycle;
 };
 
+// One row of GET /api/stocks.
+export type StockListing = { symbol: string; name: string };
+
 // Where a cyclical stock sits in its cycle, computed on the home server from
 // SEC filings. Multiples are null when the trailing figure is a loss.
 export type CyclePeak = { end: string; grossMargin: number; pe: number | null; evEbitda: number | null };

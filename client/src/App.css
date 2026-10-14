@@ -822,58 +822,37 @@
 }
 
 .combobox {
-  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   width: 200px;
   max-width: 100%;
-}
-
-.combobox input {
-  width: 100%;
-  padding: var(--space-8) var(--space-48) var(--space-8) var(--space-12);
+  padding: var(--space-8) var(--space-12);
   border: 1px solid var(--border);
   background: var(--bg-card);
   color: var(--text-primary);
   font: inherit;
   font-size: 14px;
   font-weight: 600;
+  cursor: pointer;
   transition: border-color 120ms;
 }
 
-.combobox input::placeholder {
-  font-weight: 400;
-  color: var(--text-muted);
-}
-
-.combobox input:hover {
+.combobox:hover {
   border-color: var(--border-hover);
 }
 
-.combobox input:focus-visible {
+.combobox:focus-visible {
   outline: 2px solid var(--text-primary);
   outline-offset: 2px;
 }
 
-.combobox-trigger {
-  position: absolute;
-  inset: 0 0 0 auto;
-  display: grid;
-  place-items: center;
-  width: 40px;
-  border: 0;
-  background: none;
+.combobox svg {
   color: var(--text-secondary);
-  cursor: pointer;
-}
-
-.combobox-trigger:hover {
-  color: var(--text-primary);
-}
-
-.combobox-trigger svg {
   transition: transform 120ms;
 }
 
-.combobox-trigger[data-popup-open] svg {
+.combobox[data-popup-open] svg {
   transform: rotate(180deg);
 }
 
@@ -883,10 +862,13 @@
   z-index: 10;
 }
 
+/* Wider than the button so company names fit. The search field stays put
+   while the list scrolls under it. */
 .combobox-popup {
-  width: var(--anchor-width);
-  max-height: min(280px, var(--available-height));
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  width: min(320px, var(--available-width));
+  max-height: min(336px, var(--available-height));
   padding: var(--space-4);
   border: 1px solid var(--border-hover);
   background: var(--bg-card);
@@ -903,10 +885,31 @@
   transform: translateY(-4px);
 }
 
+.combobox-search {
+  margin-bottom: var(--space-4);
+  padding: var(--space-8);
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  background: none;
+  color: var(--text-primary);
+  font: inherit;
+  /* 16px stops iOS zooming the page when the field is focused. */
+  font-size: 16px;
+  outline: none;
+}
+
+.combobox-search::placeholder {
+  color: var(--text-muted);
+}
+
+.combobox-list {
+  overflow-y: auto;
+}
+
 .combobox-item {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: var(--space-8);
   padding: var(--space-4) var(--space-8);
   font-size: 14px;
   line-height: 24px;
@@ -920,9 +923,19 @@
   color: var(--text-primary);
 }
 
-.combobox-item[data-selected] {
+.combobox-item b {
+  flex: none;
+  width: 56px;
   color: var(--text-primary);
-  font-weight: 600;
+}
+
+/* The company name takes the slack and truncates; the tick sits at the end. */
+.combobox-item span:first-of-type {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* Base UI keeps this mounted and empty while there are matches. */
@@ -935,7 +948,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .combobox-popup,
-  .combobox-trigger svg {
+  .combobox svg {
     transition: none;
   }
 }
